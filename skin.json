@@ -1,0 +1,25 @@
+{
+	"name": "SkinJson",
+	"version": "1.0",
+	"author": "...",
+	"url": "https://github.com/jdlrobson/mediawiki-skin-json",
+	"descriptionmsg": "skinjson-desc",
+	"namemsg": "skinname-skinjson",
+	"license-name": "CC0-1.0",
+	"type": "skin",
+	"requires": {
+		"MediaWiki": ">= 1.35.0"
+	},
+	"ValidSkinNames": {
+		"skinjson": {
+			"class": "SkinJSON",
+			"args": [ {
+				"name": "skinjson"
+			} ]
+		}
+	},
+	"AutoloadClasses": {
+		"SkinJSON": "SkinJSON.php"
+	},
+	"manifest_version": 1
+}
