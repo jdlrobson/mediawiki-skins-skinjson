@@ -21,5 +21,22 @@
 	"AutoloadClasses": {
 		"SkinJSON": "SkinJSON.php"
 	},
+	"ResourceModules": {
+		"skins.skinjson": {
+			"class": "ResourceLoaderSkinModule",
+			"features": {
+				"normalize": true,
+				"elements": true,
+				"content": true,
+				"interface": true,
+				"toc": true
+			},
+			"targets": [ "desktop", "mobile" ]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteSkinPath": "SkinJSON"
+	},
 	"manifest_version": 1
 }
