@@ -13,7 +13,6 @@ class SkinJSON extends SkinMustache {
 		$this->initPage( $out );
 		$out->addJsConfigVars( $this->getJsConfigVars() );
 		$response = $this->getRequest()->response();
-		$response->header( 'Access-Control-Allow-Headers: ' . $requestedHeaders );
 		$response->header( 'Content-Type: application/json' );
 		$response->header( 'Cache-Control: no-cache' );
 		$response->header( 'Access-Control-Allow-Methods: GET' );
