@@ -34,6 +34,9 @@
 			"targets": [ "desktop", "mobile" ]
 		}
 	},
+	"config": {
+		"SkinJSONTestUser": ""
+	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
 		"remoteSkinPath": "SkinJSON"

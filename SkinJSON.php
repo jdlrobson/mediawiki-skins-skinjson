@@ -7,9 +7,18 @@ class SkinJSON extends SkinMustache {
 		return json_encode( $data );
 	}
 
+	function getUser() {
+		$testUserName = $this->getConfig()->get( 'SkinJSONTestUser' );
+		if ( $this->getRequest()->getBool('testuser') && $testUserName) {
+			$testUser = User::newFromName( $testUserName );
+			$testUser->load();
+			return $testUser;
+		}
+		return parent::getUser();
+	}
+
 	function outputPage() {
 		$out = $this->getOutput();
-
 		$this->initPage( $out );
 		$out->addJsConfigVars( $this->getJsConfigVars() );
 		$response = $this->getRequest()->response();
