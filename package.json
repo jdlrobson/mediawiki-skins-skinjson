@@ -1,7 +1,12 @@
 {
 	"private": true,
 	"scripts": {
+		"start": "node dev-scripts/templatesToJson.js && parcel dev-scripts/index.html",
 		"test": "grunt test"
+	},
+	"alias": {
+		"mediawiki.util": "./dev-scripts/mediawiki.util.js",
+		"mediawiki.page.ready": "./dev-scripts/mediawiki.page.ready.js"
 	},
 	"devDependencies": {
 		"eslint-config-wikimedia": "0.17.0",
@@ -9,6 +14,10 @@
 		"grunt-banana-checker": "0.9.0",
 		"grunt-eslint": "23.0.0",
 		"grunt-stylelint": "0.16.0",
+		"parcel": "1.12.4",
 		"stylelint-config-wikimedia": "0.10.3"
+	},
+	"dependencies": {
+		"mustache": "^4.1.0"
 	}
 }
