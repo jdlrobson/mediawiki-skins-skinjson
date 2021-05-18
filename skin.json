@@ -37,6 +37,9 @@
 	"config": {
 		"SkinJSONTestUser": ""
 	},
+	"Hooks": {
+		"RequestContextCreateSkin": "SkinJSON::onRequestContextCreateSkin"
+	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
 		"remoteSkinPath": "SkinJSON"
