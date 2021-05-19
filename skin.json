@@ -38,6 +38,7 @@
 		"SkinJSONTestUser": ""
 	},
 	"Hooks": {
+		"OutputPageBeforeHTML": "SkinJSON::onOutputPageBeforeHTML",
 		"RequestContextCreateSkin": "SkinJSON::onRequestContextCreateSkin"
 	},
 	"ResourceFileModulePaths": {

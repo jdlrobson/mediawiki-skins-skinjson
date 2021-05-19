@@ -10,6 +10,10 @@ class SkinJSON extends SkinMustache {
 		return json_encode( $data );
 	}
 
+	public function setTemplateVariable( $key, $value ) {
+		$this->loadedTemplateData[$key] = $value;
+	}
+
 	/**
 	 * Returns template data for the skin from cached data or from core.
 	 */
@@ -38,10 +42,26 @@ class SkinJSON extends SkinMustache {
 		return parent::getUser();
 	}
 
+	/**
+	 * Forwards OutputPageBeforeHTML hook modifications to the template
+	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.
+	 */
+	public static function onOutputPageBeforeHTML( $out, &$html ) {
+		if ( self::isSkinJSONMode( $out->getContext()->getRequest() ) ) {
+			$out->getSkin()->setTemplateVariable('html-body-content', $html);
+		}
+	}
+
+	private static function isSkinJSONMode( $request ) {
+		$reqSkinKey = $request->getVal( 'useskin' );
+		$format = $request->getVal( 'useformat' );
+		return $reqSkinKey && $format === 'json';
+	}
+
 	public static function onRequestContextCreateSkin( $context, &$skin ) {
-		$reqSkinKey = $context->getRequest()->getVal( 'useskin' );
-		$format = $context->getRequest()->getVal( 'useformat' );
-		if ( $skin === null && $reqSkinKey && $format === 'json' ) {
+		$request = $context->getRequest();
+		if ( self::isSkinJSONMode( $request ) ) {
+			$reqSkinKey = $request->getVal( 'useskin' );
 			$services = MediaWikiServices::getInstance();
 			$factory = MediaWikiServices::getInstance()->getSkinFactory();
 			$reqSkin = $factory->makeSkin( $reqSkinKey );
@@ -53,7 +73,8 @@ class SkinJSON extends SkinMustache {
 				//$data = $reqSkin->getTemplateData();
 				// Wasteful, but makes sure skin gets initialized. setupTemplateContext is protected.
 				$html = $reqSkin->generateHTML();
-				$skin->loadTemplateData( $reqSkin->getTemplateData() );
+				$data = $reqSkin->getTemplateData();
+				$skin->loadTemplateData( $data );
 			} else {
 				$skin->loadTemplateData( [
 					'error' => 'Skin ' . $reqSkinKey . ' does not use SkinMustache and is not supported by SkinJSON',
