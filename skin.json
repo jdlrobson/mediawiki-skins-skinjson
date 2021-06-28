@@ -22,6 +22,10 @@
 		"SkinJSON": "SkinJSON.php"
 	},
 	"ResourceModules": {
+		"skins.skinjson.debug.styles": {
+			"styles": [ "skindebug.css" ],
+			"targets": [ "desktop", "mobile" ]
+		},
 		"skins.skinjson.debug": {
 			"es6": true,
 			"scripts": [ "skindebug.js" ],

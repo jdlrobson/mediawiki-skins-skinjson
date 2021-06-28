@@ -48,6 +48,7 @@ class SkinJSON extends SkinMustache {
 	 */
 	public static function onOutputPageBeforeHTML( $out, &$html ) {
 		$out->addModules( [ 'skins.skinjson.debug' ] );
+		$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
 		if ( self::isSkinJSONMode( $out->getContext()->getRequest() ) ) {
 			$out->getSkin()->setTemplateVariable('html-body-content', $html);
 		}
