@@ -1,7 +1,5 @@
 const init = () => {
 	const alertBtn = document.createElement( 'div' );
-	alertBtn.textContent = 'Development warning: This skin may break in future MediaWiki versions. Click this message to show deprecation notices.';
-	alertBtn.setAttribute( 'class', 'errorbox messagebox' );
 	let refnode = document.querySelector('body meta[charset]');
 	if ( refnode ) {
 		const deprecationMsg = [];
@@ -17,18 +15,23 @@ const init = () => {
 			text.style.display = 'block';
 		} );
 
+		alertBtn.textContent = 'Development warning: This skin may break in future MediaWiki versions. Click this message to show deprecation notices.';
+		alertBtn.setAttribute( 'class', 'errorbox messagebox' );
 		const text = document.createElement( 'pre' );
 		text.style.display = 'none';
 		text.textContent = deprecationMsg.join( '' );
 		alertBtn.appendChild( text );
+	} else {
+		alertBtn.setAttribute( 'class', 'successbox messagebox' );
+		alertBtn.textContent = 'This skin is compatible with the latest version of MediaWiki.';
+	}
 
-		const siteNotice = document.querySelector( '#siteNotice' );
-		if ( siteNotice ) {
-			siteNotice.appendChild( alertBtn );
-		} else {
-			const bodyContent = document.querySelector( '.mw-body-content' );
-			bodyContent.insertBefore( alertBtn, bodyContent.firstChild );
-		}
+	const siteNotice = document.querySelector( '#siteNotice' );
+	if ( siteNotice ) {
+		siteNotice.appendChild( alertBtn );
+	} else {
+		const bodyContent = document.querySelector( '.mw-body-content' );
+		bodyContent.insertBefore( alertBtn, bodyContent.firstChild );
 	}
 
 };
