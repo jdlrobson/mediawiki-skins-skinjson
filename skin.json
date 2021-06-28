@@ -22,6 +22,11 @@
 		"SkinJSON": "SkinJSON.php"
 	},
 	"ResourceModules": {
+		"skins.skinjson.debug": {
+			"es6": true,
+			"scripts": [ "skindebug.js" ],
+			"targets": [ "desktop", "mobile" ]
+		},
 		"skins.skinjson": {
 			"class": "ResourceLoaderSkinModule",
 			"features": {
