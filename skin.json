@@ -36,8 +36,11 @@
 			"features": {
 				"normalize": true,
 				"elements": true,
-				"content": true,
-				"interface": true,
+				"content-tables": true,
+				"content-links": true,
+				"content-links-external": false,
+				"content-media": true,
+				"interface-category": true,
 				"toc": true
 			},
 			"targets": [ "desktop", "mobile" ]
