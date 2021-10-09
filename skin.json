@@ -2,7 +2,7 @@
 	"name": "SkinJson",
 	"version": "1.2.0",
 	"author": "Jon Robson",
-	"url": "https://github.com/jdlrobson/mediawiki-skin-json",
+	"url": "https://github.com/jdlrobson/mediawiki-skins-skinjson",
 	"descriptionmsg": "skinjson-desc",
 	"namemsg": "skinname-skinjson",
 	"license-name": "CC0-1.0",
