@@ -1,7 +1,7 @@
 {
 	"name": "SkinJson",
-	"version": "1.0",
-	"author": "...",
+	"version": "1.2.0",
+	"author": "Jon Robson",
 	"url": "https://github.com/jdlrobson/mediawiki-skin-json",
 	"descriptionmsg": "skinjson-desc",
 	"namemsg": "skinname-skinjson",
@@ -46,6 +46,11 @@
 			},
 			"targets": [ "desktop", "mobile" ]
 		}
+	},
+	"MessagesDirs": {
+		"SkinJSON": [
+			"i18n"
+		]
 	},
 	"config": {
 		"SkinJSONTestUser": ""
