@@ -7,7 +7,7 @@ class SkinJSON extends SkinMustache {
 	public function generateHTML() {
 		$this->setupTemplateContext();
 		$data = $this->getTemplateData();
-		return json_encode( $data );
+		return json_encode( $data, JSON_PRETTY_PRINT );
 	}
 
 	public function setTemplateVariable( $key, $value ) {
@@ -47,8 +47,12 @@ class SkinJSON extends SkinMustache {
 	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.
 	 */
 	public static function onOutputPageBeforeHTML( $out, &$html ) {
-		$out->addModules( [ 'skins.skinjson.debug' ] );
-		$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
+	    global $wgSkinJSONDebug;
+	    
+	    if ($wgSkinJSONDebug) {
+    		$out->addModules( [ 'skins.skinjson.debug' ] );
+    		$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
+	    }
 		if ( self::isSkinJSONMode( $out->getContext()->getRequest() ) ) {
 			$out->getSkin()->setTemplateVariable('html-body-content', $html);
 		}
