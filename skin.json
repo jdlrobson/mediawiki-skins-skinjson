@@ -53,7 +53,8 @@
 		]
 	},
 	"config": {
-		"SkinJSONTestUser": ""
+		"SkinJSONTestUser": "",
+		"SkinJSONDebug": true
 	},
 	"Hooks": {
 		"OutputPageBeforeHTML": "SkinJSON::onOutputPageBeforeHTML",
