@@ -46,10 +46,9 @@ class SkinJSON extends SkinMustache {
 	 * Forwards OutputPageBeforeHTML hook modifications to the template
 	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.
 	 */
-	public static function onOutputPageBeforeHTML( $out, &$html ) {
-	    global $wgSkinJSONDebug;
+	public static function onOutputPageBeforeHTML( $out, &$html ) 
 	    
-	    if ($wgSkinJSONDebug) {
+	    if ($out->getConfig()->get('SkinJSONDebug')) {
     		$out->addModules( [ 'skins.skinjson.debug' ] );
     		$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
 	    }
