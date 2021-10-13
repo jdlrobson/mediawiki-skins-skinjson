@@ -11,7 +11,6 @@ Returns skin data as a SkinJSON to help you develop a [MediaWiki skin](https://w
 wfLoadSkin('SkinJson');
 ```
 * Navigate to the page you want to debug and add `?useskin=skinjson` to the URL e.g. http://localhost:8888/w/index.php/Main_page?useskin=skinjson
-* Install a Chrome or Firefox extension for prettifying JSON to allow exploration of the data.
 
 # Skins that extend SkinMustache
 
