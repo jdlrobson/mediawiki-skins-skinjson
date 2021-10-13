@@ -1,101 +1,68 @@
-<?php
-
-use MediaWiki\MediaWikiServices;
-
-class SkinJSON extends SkinMustache {
-	private $loadedTemplateData;
-	public function generateHTML() {
-		$this->setupTemplateContext();
-		$data = $this->getTemplateData();
-		return json_encode( $data );
-	}
-
-	public function setTemplateVariable( $key, $value ) {
-		$this->loadedTemplateData[$key] = $value;
-	}
-
-	/**
-	 * Returns template data for the skin from cached data or from core.
-	 */
-	function getTemplateData() {
-		if ($this->loadedTemplateData) {
-			return $this->loadedTemplateData;
-		} else {
-			return parent::getTemplateData();
+{
+	"name": "SkinJson",
+	"version": "1.2.0",
+	"author": "Jon Robson",
+	"url": "https://github.com/jdlrobson/mediawiki-skins-skinjson",
+	"descriptionmsg": "skinjson-desc",
+	"namemsg": "skinname-skinjson",
+	"license-name": "CC0-1.0",
+	"type": "skin",
+	"requires": {
+		"MediaWiki": ">= 1.38.0"
+	},
+	"ValidSkinNames": {
+		"skinjson": {
+			"class": "SkinJSON",
+			"skippable": true,
+			"args": [ {
+				"name": "skinjson"
+			} ]
 		}
-	}
-
-	/**
-	 * Loads template data from another skin into SkinJSON so SkinJSON functions as a proxy.
-	 */
-	function loadTemplateData( $data ) {
-		$this->loadedTemplateData = $data;
-	}
-
-	function getUser() {
-		$testUserName = $this->getConfig()->get( 'SkinJSONTestUser' );
-		if ( $this->getRequest()->getBool('testuser') && $testUserName) {
-			$testUser = User::newFromName( $testUserName );
-			$testUser->load();
-			return $testUser;
+	},
+	"AutoloadClasses": {
+		"SkinJSON": "SkinJSON.php"
+	},
+	"ResourceModules": {
+		"skins.skinjson.debug.styles": {
+			"styles": [ "skindebug.css" ],
+			"targets": [ "desktop", "mobile" ]
+		},
+		"skins.skinjson.debug": {
+			"es6": true,
+			"scripts": [ "skindebug.js" ],
+			"targets": [ "desktop", "mobile" ]
+		},
+		"skins.skinjson": {
+			"class": "ResourceLoaderSkinModule",
+			"features": {
+				"normalize": true,
+				"elements": true,
+				"content-tables": true,
+				"content-links": true,
+				"content-links-external": false,
+				"content-media": true,
+				"interface-category": true,
+				"toc": true
+			},
+			"targets": [ "desktop", "mobile" ]
 		}
-		return parent::getUser();
-	}
-
-	/**
-	 * Forwards OutputPageBeforeHTML hook modifications to the template
-	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.
-	 */
-	public static function onOutputPageBeforeHTML( $out, &$html ) {
-		$out->addModules( [ 'skins.skinjson.debug' ] );
-		$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
-		if ( self::isSkinJSONMode( $out->getContext()->getRequest() ) ) {
-			$out->getSkin()->setTemplateVariable('html-body-content', $html);
-		}
-	}
-
-	private static function isSkinJSONMode( $request ) {
-		$reqSkinKey = $request->getVal( 'useskin' );
-		$format = $request->getVal( 'useformat' );
-		return $reqSkinKey && $format === 'json';
-	}
-
-	public static function onRequestContextCreateSkin( $context, &$skin ) {
-		$request = $context->getRequest();
-		if ( self::isSkinJSONMode( $request ) ) {
-			$reqSkinKey = $request->getVal( 'useskin' );
-			$services = MediaWikiServices::getInstance();
-			$factory = MediaWikiServices::getInstance()->getSkinFactory();
-			$reqSkin = $factory->makeSkin( $reqSkinKey );
-			$skin = $factory->makeSkin( Skin::normalizeKey( 'skinjson' ) );
-			// Stop the hook from running again.
-			$context->setSkin( $skin );
-
-			if ( method_exists( $reqSkin, 'getTemplateData' ) ) {
-				//$data = $reqSkin->getTemplateData();
-				// Wasteful, but makes sure skin gets initialized. setupTemplateContext is protected.
-				$html = $reqSkin->generateHTML();
-				$data = $reqSkin->getTemplateData();
-				$skin->loadTemplateData( $data );
-			} else {
-				$skin->loadTemplateData( [
-					'error' => 'Skin ' . $reqSkinKey . ' does not use SkinMustache and is not supported by SkinJSON',
-				] );
-			}
-		}
-		return false;
-	}
-
-	function outputPage() {
-		$out = $this->getOutput();
-		$this->initPage( $out );
-		$out->addJsConfigVars( $this->getJsConfigVars() );
-		$response = $this->getRequest()->response();
-		$response->header( 'Content-Type: application/json' );
-		$response->header( 'Cache-Control: no-cache' );
-		$response->header( 'Access-Control-Allow-Methods: GET' );
-		$response->header( 'Access-Control-Allow-Origin: *' );
-		// result may be an error
-		echo $this->generateHTML();
-	}
+	},
+	"MessagesDirs": {
+		"SkinJSON": [
+			"i18n"
+		]
+	},
+	"config": {
+		"SkinJSONTestUser": "",
+		"SkinJSONDebug": true
+	},
+	"Hooks": {
+		"OutputPageBeforeHTML": "SkinJSON::onOutputPageBeforeHTML",
+		"RequestContextCreateSkin": "SkinJSON::onRequestContextCreateSkin"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteSkinPath": "SkinJSON"
+	},
+	"manifest_version": 1
 }
