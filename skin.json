@@ -23,6 +23,12 @@
 		"SkinJSON": "SkinJSON.php"
 	},
 	"ResourceModules": {
+		"skins.skinjson.validate": {
+			"es6": true,
+			"dependencies": [ "mediawiki.user" ],
+			"scripts": [ "skinValidate.js" ],
+			"targets": [ "desktop", "mobile" ]
+		},
 		"skins.skinjson.debug.styles": {
 			"styles": [ "skindebug.css" ],
 			"targets": [ "desktop", "mobile" ]
@@ -54,11 +60,17 @@
 	},
 	"config": {
 		"SkinJSONTestUser": "",
-		"SkinJSONDebug": true
+		"SkinJSONDebug": true,
+		"SkinJSONValidate": true
 	},
 	"Hooks": {
+		"SidebarBeforeOutput": "SkinJSON::onSidebarBeforeOutput",
 		"OutputPageBeforeHTML": "SkinJSON::onOutputPageBeforeHTML",
-		"RequestContextCreateSkin": "SkinJSON::onRequestContextCreateSkin"
+		"RequestContextCreateSkin": "SkinJSON::onRequestContextCreateSkin",
+		"SkinAfterPortlet": "SkinJSON::onSkinAfterPortlet",
+		"SkinAfterContent": "SkinJSON::onSkinAfterContent",
+		"SkinAddFooterLinks": "SkinJSON::onSkinAddFooterLinks",
+		"SkinTemplateNavigation::Universal": "SkinJSON::onSkinTemplateNavigationUniversal"
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "",
