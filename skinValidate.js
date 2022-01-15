@@ -1,5 +1,6 @@
 $(function () {
     const isAnon = mw.user.isAnon();
+    const validateConfig = mw.config.get('wgSkinJSONValidate', {});
     const pageExists = mw.config.get( 'wgCurRevisionId' ) !== 0;
     const pageHasCategories =  mw.config.get( 'wgCategories' ).length;
     const rules = {
@@ -11,10 +12,18 @@ $(function () {
         'May not support search autocomplete': $('.mw-searchInput,#searchInput').length > 0,
         'Supports extensions extending the sidebar': $(
             '.skin-json-validation-element-SidebarBeforeOutput'
-        ).length !== 0,
-        'Does not seem to support wordmarks':
-            $( '.mw-logo-wordmark, header img, .mw-wiki-logo' ).length !== 0
+        ).length !== 0
     };
+    if ( validateConfig.wgLogos ) {
+        const logos = validateConfig.wgLogos;
+        rules['Does not seem to support wordmarks'] =
+            Array.from(document.querySelectorAll( 'img' ))
+                .filter((n) => {
+                    const src = n.getAttribute('src');
+                    return src === logos.wordmark.src ||
+                        src.icon;
+                } ).length !== 0;
+    }
     if ( $('.mw-parser-output h2').length > 3 ) {
         rules['May not include a table of contents'] = $('.toc').length !== 0;
     }

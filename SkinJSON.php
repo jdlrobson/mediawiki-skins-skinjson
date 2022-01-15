@@ -47,11 +47,19 @@ class SkinJSON extends SkinMustache {
 	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.
 	 */
 	public static function onOutputPageBeforeHTML( $out, &$html ) {
-		if ( $out->getConfig()->get( 'SkinJSONDebug' ) ) {
+		$config = $out->getConfig();
+		if ( $config->get( 'SkinJSONDebug' ) ) {
 			$out->addModules( [ 'skins.skinjson.debug' ] );
 			$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
 		}
-		if ( $out->getConfig()->get( 'SkinJSONValidate' ) ) {
+		if ( $config->get( 'SkinJSONValidate' ) ) {
+			$out->addJsConfigVars( [
+				'wgSkinJSONValidate' => [
+					'wgLogos' => ResourceLoaderSkinModule::getAvailableLogos(
+						$config
+					),
+				],
+			] );
 			$out->addHTML(
 				implode( '', [
 					'<style type="text/css">',
