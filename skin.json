@@ -64,6 +64,7 @@
 		"SkinJSONValidate": true
 	},
 	"Hooks": {
+		"SiteNoticeBefore": "SkinJSON::onSiteNoticeBefore",
 		"SidebarBeforeOutput": "SkinJSON::onSidebarBeforeOutput",
 		"OutputPageBeforeHTML": "SkinJSON::onOutputPageBeforeHTML",
 		"RequestContextCreateSkin": "SkinJSON::onRequestContextCreateSkin",

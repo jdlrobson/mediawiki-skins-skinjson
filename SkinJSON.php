@@ -42,6 +42,15 @@ class SkinJSON extends SkinMustache {
 		return parent::getUser();
 	}
 
+	public static function onSiteNoticeBefore( &$siteNotice, $skin ) {
+		$config = $skin->getConfig();
+		if ( $config->get( 'SkinJSONValidate' ) ) {
+			$siteNotice .= Html::element( 'div', [
+				'class' => 'skin-json-banner-validation-element skin-json-validation-element',
+			], '' );
+			return false;
+		}
+	}
 	/**
 	 * Forwards OutputPageBeforeHTML hook modifications to the template
 	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.

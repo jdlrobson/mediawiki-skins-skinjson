@@ -8,7 +8,7 @@ $(function () {
         'Does not have the #ca-edit edit button': $('#ca-edit').length !== 0
     };
     const rules = {
-        'Does not supports site notices (banners)': $( '#siteNotice' ).length > 0,
+        'Does not supports site notices (banners)': $( '.skin-json-banner-validation-element' ).length > 0,
         'Is not responsive': $('meta[name="viewport"]').length > 0,
         'May not show sidebar main navigation': $( '#n-mainpage-description' ).length !== 0,
         'May not support search autocomplete': $('.mw-searchInput,#searchInput').length > 0,
@@ -18,21 +18,22 @@ $(function () {
     };
     if ( validateConfig.wgLogos ) {
         const logos = validateConfig.wgLogos;
-        rules['Does not seem to support wordmarks'] =
+        rules['Does not seem to support wordmarks'] = !(
             Array.from(document.querySelectorAll( 'img' ))
                 .filter((n) => {
                     const src = n.getAttribute('src');
                     return src === logos.wordmark.src ||
                         src.icon;
-                } ).length !== 0;
+                } ).length === 0 && $( '.mw-wiki-logo' ).length === 0
+        );
     }
     if ( $('.mw-parser-output h2').length > 3 ) {
         rules['May not include a table of contents'] = $('.toc').length !== 0;
     }
     if ( pageExists ) {
         rules['May not link to the history page in the standard way'] = $('#ca-history').length !== 0;
-        rules['May not display copyright'] = $('#footer-info-copyright, .footer-info-copyright').length !== 0;
-        rules['May not support languages'] = $( '#interlanguage-link,.uls-trigger' ).length !== 0;
+        rules['May not display copyright'] = $('#footer-info-copyright, #f-list #copyright, .footer-info-copyright').length !== 0;
+        rules['May not support languages'] = $( '#interlanguage-link,.language-selector,.uls-trigger' ).length !== 0;
     }
     if ( pageHasCategories ) {
         rules['May not support hidden categories'] = $( '.mw-hidden-catlinks' ).length !== 0;
@@ -102,7 +103,7 @@ $(function () {
     if ( !isAnon ) {
         rulesAdvancedUsers['May not support notifications'] = $( '#pt-notifications-alert' ).length !== 0;
         rulesAdvancedUsers['Supports extensions extending personal tools'] = $(
-            '.skin-json-validation-element-SkinTemplateNavigationUniversal'
+            '#pt-skin-json-hook-validation-user-menu'
         ).length !== 0;
         scoreIt( rulesAdvancedUsers, 'Advanced users', 1 );
     }
