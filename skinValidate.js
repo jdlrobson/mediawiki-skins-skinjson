@@ -23,7 +23,7 @@ $(function () {
                 .filter((n) => {
                     const src = n.getAttribute('src');
                     return src === logos.wordmark.src ||
-                        src.icon;
+                        logos.icon;
                 } ).length === 0 && $( '.mw-wiki-logo' ).length === 0
         );
     }
