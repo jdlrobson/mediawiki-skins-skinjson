@@ -36,7 +36,7 @@ class Handler extends Rest\Handler {
 			}
 		}
 
-		$response = $this->getResponseFactory()->createJson( [ 'skins' => $skins, 'foo' => 1 ] );
+		$response = $this->getResponseFactory()->createJson( [ 'skins' => $skins ] );
 		$response->setHeader( 'Access-Control-Allow-Origin', '*' );
 		$response->setHeader( 'Cache-Control', 'no-store, max-age=0' );
 		return $response;
