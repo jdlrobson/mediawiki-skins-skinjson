@@ -22,6 +22,10 @@
 	"AutoloadClasses": {
 		"SkinJSON": "SkinJSON.php"
 	},
+	"AutoloadNamespaces": {
+	  "SkinJSON\\": "includes/"
+	},
+	"callback": "SkinJSON::onRegistration",
 	"ResourceModules": {
 		"skins.skinjson.validate": {
 			"es6": true,

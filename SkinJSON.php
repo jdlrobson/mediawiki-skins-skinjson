@@ -52,6 +52,14 @@ class SkinJSON extends SkinMustache {
 		}
 	}
 
+	public static function onRegistration() {
+		global $wgRestAPIAdditionalRouteFiles;
+		global $IP;
+		$wgRestAPIAdditionalRouteFiles[] = wfRelativePath(
+			__DIR__ . '/restRoutes.json', $IP
+		);
+	}
+
 	/**
 	 * Forwards OutputPageBeforeHTML hook modifications to the template
 	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.
