@@ -8,6 +8,7 @@ $(function () {
         'Does not have the #ca-edit edit button': $('#ca-edit').length !== 0
     };
     const rules = {
+        'Does not show the article': $( '.mw-body-content' ).length > 0,
         'Does not supports site notices (banners)': $( '.skin-json-banner-validation-element' ).length > 0,
         'Is not responsive': $('meta[name="viewport"]').length > 0,
         'May not show sidebar main navigation': $( '#n-mainpage-description' ).length !== 0,
@@ -33,7 +34,10 @@ $(function () {
     if ( pageExists ) {
         rules['May not link to the history page in the standard way'] = $('#ca-history').length !== 0;
         rules['May not display copyright'] = $('#footer-info-copyright, #f-list #copyright, .footer-info-copyright').length !== 0;
-        rules['May not support languages'] = $( '#interlanguage-link,.language-selector,.uls-trigger' ).length !== 0;
+        rules['May not support languages'] = $( '.mw-portlet-lang' ).length !== 0;
+    }
+    if ( mw.loader.getState('ext.uls.interface') !== null ) {
+        rules['Does not support ULS compact language links'] = $( '.mw-portlet-lang ul, #p-lang ul, .mw-interlanguage-selector' ).length !== 0;
     }
     if ( pageHasCategories ) {
         rules['May not support hidden categories'] = $( '.mw-hidden-catlinks' ).length !== 0;

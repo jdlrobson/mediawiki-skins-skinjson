@@ -51,6 +51,7 @@ class SkinJSON extends SkinMustache {
 			return false;
 		}
 	}
+
 	/**
 	 * Forwards OutputPageBeforeHTML hook modifications to the template
 	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.
@@ -77,6 +78,7 @@ class SkinJSON extends SkinMustache {
 				] )
 			);
 			$out->addModules( [ 'skins.skinjson.validate' ] );
+			$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
 		}
 		if ( self::isSkinJSONMode( $out->getContext()->getRequest() ) ) {
 			$out->getSkin()->setTemplateVariable('html-body-content', $html);
