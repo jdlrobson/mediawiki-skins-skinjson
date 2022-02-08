@@ -2,7 +2,7 @@ $(function () {
     const isAnon = mw.user.isAnon();
     const validateConfig = mw.config.get('wgSkinJSONValidate', {});
     const pageExists = mw.config.get( 'wgCurRevisionId' ) !== 0;
-    const pageHasCategories =  mw.config.get( 'wgCategories' ).length;
+    const pageHasCategories =  mw.config.get( 'wgCategories', [] ).length;
     const rulesAdvancedUsers = {
         'Does not show personal menu in a gadget compatible way': $( '#p-personal' ).length !== 0,
         'Does not have the #ca-edit edit button': $('#ca-edit').length !== 0
