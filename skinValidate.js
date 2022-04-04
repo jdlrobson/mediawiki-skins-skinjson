@@ -18,12 +18,12 @@ $(function () {
         ).length !== 0
     };
     if ( validateConfig.wgLogos ) {
-        const logos = validateConfig.wgLogos;
+        const logos = validateConfig.wgLogos || {};
         rules['Does not seem to support wordmarks'] = !(
             Array.from(document.querySelectorAll( 'img' ))
                 .filter((n) => {
                     const src = n.getAttribute('src');
-                    return src === logos.wordmark.src ||
+                    return ( logos.wordmark && src === logos.wordmark.src ) ||
                         logos.icon;
                 } ).length === 0 && $( '.mw-wiki-logo' ).length === 0
         );
