@@ -43,12 +43,13 @@ class SkinJSON extends SkinMustache {
 	}
 
 	public static function onSiteNoticeBefore( &$siteNotice, $skin ) {
+		$empty = strlen( $siteNotice ) === 0;
 		$config = $skin->getConfig();
 		if ( $config->get( 'SkinJSONValidate' ) ) {
 			$siteNotice .= Html::element( 'div', [
 				'class' => 'skin-json-banner-validation-element skin-json-validation-element',
 			], '' );
-			return false;
+			return $empty;
 		}
 	}
 
