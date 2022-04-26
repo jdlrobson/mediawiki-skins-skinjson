@@ -1,8 +1,10 @@
 <?php
 
 namespace SkinJSON;
+use SkinException;
 use ExtensionRegistry;
 use MediaWiki\Rest;
+use MediaWiki\MediaWikiServices;
 
 /**
  * Handler class for Core REST API endpoint that handles basic search
@@ -21,6 +23,7 @@ class Handler extends Rest\Handler {
 		$reg = ExtensionRegistry::getInstance();
 		$skins = [];
 		$installed = $reg->getAllThings();
+		$factory = MediaWikiServices::getInstance()->getSkinFactory();
 		foreach( $installed as $key => $info ) {
 			if ( is_string( $info['author'] ) ) {
 				$info['author'] = [ $info['author'] ];
@@ -31,6 +34,23 @@ class Handler extends Rest\Handler {
 				$validSkins = $skinInfo['ValidSkinNames'];
 				unset( $info['name'] );
 				foreach( $validSkins as $skinkey => $validSkinInfo ) {
+					$tags = [];
+					try {
+						$skin = $factory->makeSkin( $skinkey );
+						if (
+							is_subclass_of( $skin, 'SkinMustache' )
+						) {
+							$tags[] = 'mustache';
+						}
+						if (
+							is_subclass_of( $skin, 'SkinTemplate' )
+						) {
+							$tags[] = 'php';
+						}
+					} catch ( SkinException $e ) {
+						$tags[] = 'load-error';
+					}
+					$info['tag'] = $tags;
 					$skins[ $skinkey ] = $info;
 				}
 			}
