@@ -143,6 +143,58 @@ class SkinJSON extends SkinMustache {
 		return $reqSkinKey && $format === 'json';
 	}
 
+	/**
+	 * Attempt a basic render of the skin and collect some meta
+	 * data based on what happens.
+	 *
+	 * @return array of meta data reflecting the render state
+	 */
+	public static function getRenderSkinMeta( Skin $skin ) {
+		$tags = [];
+		$profileTime = -1;
+		$deprecationWarnings = 0;
+		try {
+			error_reporting( -1 );
+			ini_set( 'display_errors', -1 );
+			$fauxContext = $skin->getContext();
+			$out = new OutputPage( new RequestContext() );
+			$fauxContext->setOutput( $out );
+			$fauxContext->setTitle( Title::newFromText( 'Special:BlankPage' ) );
+			$skin->setContext( $fauxContext );
+
+			$then = microtime( true );
+			$html = $skin->generateHTML();
+			$now = microtime( true );
+			$profileTime = $now - $then;
+			$deprecationWarnings = substr_count( $html, '<b>Deprecated</b>' );
+			if ( $deprecationWarnings > 0 ) {
+				$tags[] = 'deprecation-warnings';
+			}
+
+			error_reporting( 0 );
+			ini_set( 'display_errors', 0);
+		} catch ( Exception $e ) {
+			$tags[] = 'render-error';
+		} finally {
+			error_reporting( 0 );
+			ini_set( 'display_errors', 0 );
+		}
+
+		if ( $perf < 0.05 ) {
+			$score = 'A';
+		} elseif ( $perf < 0.09 ) {
+			$score = 'B';
+		} else {
+			$score = 'C';
+		}
+		return [
+			'performance' => $score,
+			'tag' => $tags,
+			'time' => $profileTime,
+			'warnings' => $deprecationWarnings,
+		];
+	}
+
 	public static function onRequestContextCreateSkin( $context, &$skin ) {
 		$request = $context->getRequest();
 		if ( self::isSkinJSONMode( $request ) ) {

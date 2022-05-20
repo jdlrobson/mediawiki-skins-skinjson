@@ -5,6 +5,7 @@ use SkinException;
 use ExtensionRegistry;
 use MediaWiki\Rest;
 use MediaWiki\MediaWikiServices;
+use SkinJSON;
 
 /**
  * Handler class for Core REST API endpoint that handles basic search
@@ -19,41 +20,37 @@ class Handler extends Rest\Handler {
 		return date( 'Y-m-d', strtotime('-1 day') );
 	}
 
-	private function getTags( $factory, $skinkey ) {
+	private function getMeta( $factory, $skinkey ) {
 		$tags = [];
 		try {
 			$skin = $factory->makeSkin( $skinkey );
 			$options = $skin->getOptions() ?? [];
-			ob_start();
-			$html = $skin->generateHTML();
-			$html .= ob_get_contents();
-			ob_end_clean();
-			if (
-				is_a( $skin, 'SkinMustache' ) ||
-				is_subclass_of( $skin, 'SkinMustache' )
-			) {
-				$tags[] = 'mustache';
-			} elseif (
-				is_a( $skin, 'SkinTemplate' ) ||
-				is_subclass_of( $skin, 'SkinTemplate' )
-			) {
-				$tags[] = 'php';
-				$bodyOnly = $options['bodyOnly'] ?? false;
-				if ( !$bodyOnly ) {
-					$tags[] = 'php-legacy';
-				}
-			}
-			$responsive = $options['responsive'] ?? false;
-			if ( $responsive ) {
-				$tags[] = 'responsive';
-			}
 		} catch ( SkinException $e ) {
 			$tags[] = 'load-error';
+			$options = [];
 		}
-		if ( strpos( $html, '<b>Deprecated</b>' ) !== false ) {
-			$tags[] = 'deprecation-warnings';
+		if (
+			is_a( $skin, 'SkinMustache' ) ||
+			is_subclass_of( $skin, 'SkinMustache' )
+		) {
+			$tags[] = 'mustache';
+		} elseif (
+			is_a( $skin, 'SkinTemplate' ) ||
+			is_subclass_of( $skin, 'SkinTemplate' )
+		) {
+			$tags[] = 'php';
+			$bodyOnly = $options['bodyOnly'] ?? false;
+			if ( !$bodyOnly ) {
+				$tags[] = 'php-legacy';
+			}
 		}
-		return $tags;
+		$responsive = $options['responsive'] ?? false;
+		if ( $responsive ) {
+			$tags[] = 'responsive';
+		}
+		$meta = SkinJSON::getRenderSkinMeta( $skin );
+		$meta['tag'] = array_merge( $tags,  $meta['tag'] );
+		return $meta;
 	}
 
 	/**
@@ -75,11 +72,11 @@ class Handler extends Rest\Handler {
 				$validSkins = $skinInfo['ValidSkinNames'];
 				unset( $info['name'] );
 				foreach( $validSkins as $skinkey => $validSkinInfo ) {
-					$skinJSON = json_decode( file_get_contents( $info['path'] ), true );
-					$compatibility = $skinJSON['requires']['MediaWiki'] ?? null;
+					$json = json_decode( file_get_contents( $info['path'] ), true );
+					$compatibility = $json['requires']['MediaWiki'] ?? null;
 					$info['compatible'] = $compatibility;
-					$info['hooks'] = array_keys( $skinJSON['Hooks'] ?? [] );
-					$info['tag'] = $this->getTags( $factory, $skinkey );
+					$info['hooks'] = array_keys( $json['Hooks'] ?? [] );
+					$info += $this->getMeta( $factory, $skinkey );
 					$skins[ $skinkey ] = $info;
 				}
 			}
