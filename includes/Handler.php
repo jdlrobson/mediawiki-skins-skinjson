@@ -23,8 +23,11 @@ class Handler extends Rest\Handler {
 		$tags = [];
 		try {
 			$skin = $factory->makeSkin( $skinkey );
-			$options = $skin->getOptions();
+			$options = $skin->getOptions() ?? [];
+			ob_start();
 			$html = $skin->generateHTML();
+			$html .= ob_get_contents();
+			ob_end_clean();
 			if (
 				is_a( $skin, 'SkinMustache' ) ||
 				is_subclass_of( $skin, 'SkinMustache' )
@@ -35,11 +38,13 @@ class Handler extends Rest\Handler {
 				is_subclass_of( $skin, 'SkinTemplate' )
 			) {
 				$tags[] = 'php';
-				if ( !$options['bodyOnly'] ) {
+				$bodyOnly = $options['bodyOnly'] ?? false;
+				if ( !$bodyOnly ) {
 					$tags[] = 'php-legacy';
 				}
 			}
-			if ( $options['responsive'] ) {
+			$responsive = options['responsive'] ?? false;
+			if ( $responsive ) {
 				$tags[] = 'responsive';
 			}
 		} catch ( SkinException $e ) {
