@@ -15,11 +15,16 @@ class Handler extends Rest\Handler {
 		return false;
 	}
 
+	protected function getLastModified() {
+		return date( 'Y-m-d', strtotime('-1 day') );
+	}
+
 	private function getTags( $factory, $skinkey ) {
 		$tags = [];
 		try {
 			$skin = $factory->makeSkin( $skinkey );
 			$options = $skin->getOptions();
+			$html = $skin->generateHTML();
 			if (
 				is_a( $skin, 'SkinMustache' ) ||
 				is_subclass_of( $skin, 'SkinMustache' )
@@ -39,6 +44,9 @@ class Handler extends Rest\Handler {
 			}
 		} catch ( SkinException $e ) {
 			$tags[] = 'load-error';
+		}
+		if ( strpos( $html, '<b>Deprecated</b>' ) !== false ) {
+			$tags[] = 'deprecation-warnings';
 		}
 		return $tags;
 	}
