@@ -15,6 +15,34 @@ class Handler extends Rest\Handler {
 		return false;
 	}
 
+	private function getTags( $factory, $skinkey ) {
+		$tags = [];
+		try {
+			$skin = $factory->makeSkin( $skinkey );
+			$options = $skin->getOptions();
+			if (
+				is_a( $skin, 'SkinMustache' ) ||
+				is_subclass_of( $skin, 'SkinMustache' )
+			) {
+				$tags[] = 'mustache';
+			} elseif (
+				is_a( $skin, 'SkinTemplate' ) ||
+				is_subclass_of( $skin, 'SkinTemplate' )
+			) {
+				$tags[] = 'php';
+				if ( !$options['bodyOnly'] ) {
+					$tags[] = 'php-legacy';
+				}
+			}
+			if ( $options['responsive'] ) {
+				$tags[] = 'responsive';
+			}
+		} catch ( SkinException $e ) {
+			$tags[] = 'load-error';
+		}
+		return $tags;
+	}
+
 	/**
 	 * @return Response
 	 * @throws LocalizedHttpException
@@ -34,31 +62,11 @@ class Handler extends Rest\Handler {
 				$validSkins = $skinInfo['ValidSkinNames'];
 				unset( $info['name'] );
 				foreach( $validSkins as $skinkey => $validSkinInfo ) {
-					$tags = [];
-					try {
-						$skin = $factory->makeSkin( $skinkey );
-						$options = $skin->getOptions();
-						if (
-							is_a( $skin, 'SkinMustache' ) ||
-							is_subclass_of( $skin, 'SkinMustache' )
-						) {
-							$tags[] = 'mustache';
-						} elseif (
-							is_a( $skin, 'SkinTemplate' ) ||
-							is_subclass_of( $skin, 'SkinTemplate' )
-						) {
-							$tags[] = 'php';
-							if ( !$options['bodyOnly'] ) {
-								$tags[] = 'php-legacy';
-							}
-						}
-						if ( $options['responsive'] ) {
-							$tags[] = 'responsive';
-						}
-					} catch ( SkinException $e ) {
-						$tags[] = 'load-error';
-					}
-					$info['tag'] = $tags;
+					$skinJSON = json_decode( file_get_contents( $info['path'] ), true );
+					$compatibility = $skinJSON['requires']['MediaWiki'] ?? null;
+					$info['compatible'] = $compatibility;
+					$info['hooks'] = array_keys( $skinJSON['Hooks'] ?? [] );
+					$info['tag'] = $this->getTags( $factory, $skinkey );
 					$skins[ $skinkey ] = $info;
 				}
 			}
