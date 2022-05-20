@@ -43,7 +43,7 @@ class Handler extends Rest\Handler {
 					$tags[] = 'php-legacy';
 				}
 			}
-			$responsive = options['responsive'] ?? false;
+			$responsive = $options['responsive'] ?? false;
 			if ( $responsive ) {
 				$tags[] = 'responsive';
 			}
