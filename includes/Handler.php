@@ -48,8 +48,9 @@ class Handler extends Rest\Handler {
 		if ( $responsive ) {
 			$tags[] = 'responsive';
 		}
-		$meta = SkinJSON::getRenderSkinMeta( $skin );
-		$meta['tag'] = array_merge( $tags,  $meta['tag'] );
+		// Disabled temporarily for performance reasons
+		//$meta = SkinJSON::getRenderSkinMeta( $skin );
+		//$meta['tag'] = array_merge( $tags,  $meta['tag'] );
 		return $meta;
 	}
 
