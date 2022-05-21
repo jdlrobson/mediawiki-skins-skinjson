@@ -159,6 +159,7 @@ class SkinJSON extends SkinMustache {
 			ini_set( 'display_errors', -1 );
 			$fauxContext = $skin->getContext();
 			$out = new OutputPage( new RequestContext() );
+			$out->enableOOUI();
 			$fauxContext->setOutput( $out );
 			$fauxContext->setTitle( Title::newFromText( 'Special:BlankPage' ) );
 			$skin->setContext( $fauxContext );
