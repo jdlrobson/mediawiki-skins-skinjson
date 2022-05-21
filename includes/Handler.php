@@ -81,7 +81,7 @@ class Handler extends Rest\Handler {
 	}
 
 	private function getResponseJSON() {
-		$cacheFilePath = '/tmp/cache-skins-json-response';
+		$cacheFilePath = getcwd() . '/cache-skins-json-response';
 		$cached = file_get_contents($cacheFilePath);
 		if ( $cached ) {
 			$cached = json_decode( $cached, true );
