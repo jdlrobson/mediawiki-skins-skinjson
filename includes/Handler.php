@@ -6,6 +6,7 @@ use ExtensionRegistry;
 use MediaWiki\Rest;
 use MediaWiki\MediaWikiServices;
 use SkinJSON;
+use Wikimedia\ParamValidator\ParamValidator;
 
 /**
  * Handler class for Core REST API endpoint that handles basic search
@@ -18,6 +19,16 @@ class Handler extends Rest\Handler {
 
 	protected function getLastModified() {
 		return date( 'Y-m-d', strtotime('-1 day') );
+	}
+
+	public function getParamSettings() {
+		return [
+			'experimental' => [
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_REQUIRED => false,
+				Handler::PARAM_SOURCE => 'query',
+			]
+		];
 	}
 
 	private function getMeta( $factory, $skinkey ) {
@@ -48,8 +59,9 @@ class Handler extends Rest\Handler {
 		if ( $responsive ) {
 			$tags[] = 'responsive';
 		}
-		// Disabled temporarily for performance reasons
-		$meta = [ 'tag' => [] ]; // SkinJSON::getRenderSkinMeta( $skin );
+		$args = $this->getValidatedParams();
+		$meta = $args['experimental'] ?
+			SkinJSON::getRenderSkinMeta( $skin ) : [ 'tag' => [] ];
 		$meta['tag'] = array_merge( $tags,  $meta['tag'] );
 		return $meta;
 	}
@@ -80,6 +92,7 @@ class Handler extends Rest\Handler {
 			return json_decode( $result, true );
 		}
 
+		$highest = 0;
 		foreach( $installed as $key => $info ) {
 			if ( is_string( $info['author'] ) ) {
 				$info['author'] = [ $info['author'] ];
@@ -95,7 +108,24 @@ class Handler extends Rest\Handler {
 					$info['compatibility'] = $compatibility;
 					$info['hooks'] = array_keys( $json['Hooks'] ?? [] );
 					$info += $this->getMeta( $factory, $skinkey );
+					if ( isset( $info['time'] ) && $info['time'] > $highest ) {
+						$highest = $info['time'];
+					}
 					$skins[ $skinkey ] = $info;
+				}
+			}
+		}
+		$a = $highest / 3;
+		$b = $a + $a;
+		$c = $highest;
+		foreach( $skins as $key => $data ) {
+			if ( isset( $data['time'] ) ) {
+				if ( $data['time'] < $a ) {
+					$skins[$key]['perf'] = 'A';
+				} elseif ( $data['time'] < $b ) {
+					$skins[$key]['perf'] = 'B';
+				} else {
+					$skins[$key]['perf'] = 'C';
 				}
 			}
 		}

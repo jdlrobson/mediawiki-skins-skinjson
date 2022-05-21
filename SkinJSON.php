@@ -175,22 +175,14 @@ class SkinJSON extends SkinMustache {
 
 			error_reporting( 0 );
 			ini_set( 'display_errors', 0);
-		} catch ( Exception $e ) {
+		} catch ( Throwable $e ) {
 			$tags[] = 'render-error';
 		} finally {
 			error_reporting( 0 );
 			ini_set( 'display_errors', 0 );
 		}
 
-		if ( $perf < 0.05 ) {
-			$score = 'A';
-		} elseif ( $perf < 0.09 ) {
-			$score = 'B';
-		} else {
-			$score = 'C';
-		}
 		return [
-			'performance' => $score,
 			'tag' => $tags,
 			'time' => $profileTime,
 			'warnings' => $deprecationWarnings,
