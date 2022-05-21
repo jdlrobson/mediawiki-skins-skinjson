@@ -72,11 +72,34 @@ class Handler extends Rest\Handler {
 	 */
 	public function execute() {
 		$services = MediaWikiServices::getInstance();
-		$skins = $this->getSkinsJSON( $services );
-		$response = $this->getResponseFactory()->createJson( [ 'skins' => $skins ] );
+		$response = $this->getResponseFactory()->createJson(
+			$this->getResponseJSON()
+		);
 		$response->setHeader( 'Access-Control-Allow-Origin', '*' );
 		$response->setHeader( 'Cache-Control', 'no-store, max-age=0' );
 		return $response;
+	}
+
+	private function getResponseJSON() {
+		$cacheFilePath = '/tmp/cache-skins-json-response';
+		$cached = file_get_contents($cacheFilePath);
+		if ( $cached ) {
+			$cached = json_decode( $cached, true );
+			if ( $cached['timestamp'] === date( 'Y-m-d' ) ) {
+				return $cached;
+			}
+		}
+
+		// otherwise generate...
+		$skins = $this->getSkinsJSON( $services );
+		$args = $this->getValidatedParams();
+		$json = [ 'skins' => $skins, 'timestamp' => date( 'Y-m-d' ) ];
+		$encoded = json_encode( $json );
+		// cache to file when running experimental
+		if ( $args['experimental'] ) {
+			file_put_contents( $cacheFilePath, $encoded );
+		}
+		return $json;
 	}
 
 	private function getSkinsJSON( $services ) {
