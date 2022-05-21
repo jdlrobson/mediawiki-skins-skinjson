@@ -58,10 +58,26 @@ class Handler extends Rest\Handler {
 	 * @throws LocalizedHttpException
 	 */
 	public function execute() {
+		$skins = $this->getSkinsJSON( $services );
+		$response = $this->getResponseFactory()->createJson( [ 'skins' => $skins ] );
+		$response->setHeader( 'Access-Control-Allow-Origin', '*' );
+		$response->setHeader( 'Cache-Control', 'no-store, max-age=0' );
+		return $response;
+	}
+
+	private function getSkinsJSON( $services ) {
 		$reg = ExtensionRegistry::getInstance();
-		$skins = [];
 		$installed = $reg->getAllThings();
-		$factory = MediaWikiServices::getInstance()->getSkinFactory();
+		$skins = [];
+		$services = MediaWikiServices::getInstance();
+		$factory = $services->getSkinFactory();
+		$wanCache = $services->getMainWANObjectCache();
+		$key = $wanCache->makeKey( 'skinjson-rest-handler-json' );
+		$result = $wanCache->get( $key );
+		if ( $result ) {
+			return json_decode( $result, true );
+		}
+
 		foreach( $installed as $key => $info ) {
 			if ( is_string( $info['author'] ) ) {
 				$info['author'] = [ $info['author'] ];
@@ -81,10 +97,7 @@ class Handler extends Rest\Handler {
 				}
 			}
 		}
-
-		$response = $this->getResponseFactory()->createJson( [ 'skins' => $skins ] );
-		$response->setHeader( 'Access-Control-Allow-Origin', '*' );
-		$response->setHeader( 'Cache-Control', 'no-store, max-age=0' );
-		return $response;
+		$wanCache->set( $key, json_encode( $skins ), 60 * 10 );
+		return $skins;
 	}
 }
