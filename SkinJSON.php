@@ -153,6 +153,7 @@ class SkinJSON extends SkinMustache {
 		$tags = [];
 		$profileTime = -1;
 		$deprecationWarnings = 0;
+		ob_start();
 		try {
 			error_reporting( -1 );
 			ini_set( 'display_errors', -1 );
@@ -181,6 +182,7 @@ class SkinJSON extends SkinMustache {
 			error_reporting( 0 );
 			ini_set( 'display_errors', 0 );
 		}
+		ob_end_clean();
 
 		return [
 			'tag' => $tags,
