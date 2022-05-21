@@ -169,6 +169,8 @@ class SkinJSON extends SkinMustache {
 			$deprecationWarnings = substr_count( $html, '<b>Deprecated</b>' );
 			if ( $deprecationWarnings > 0 ) {
 				$tags[] = 'deprecation-warnings';
+			} else {
+				$tags[] = 'compatible-master';
 			}
 
 			error_reporting( 0 );
