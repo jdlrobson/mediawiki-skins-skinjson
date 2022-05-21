@@ -165,9 +165,10 @@ class SkinJSON extends SkinMustache {
 
 			$then = microtime( true );
 			$html = $skin->generateHTML();
+			$warnings = ob_get_contents();
 			$now = microtime( true );
 			$profileTime = $now - $then;
-			$deprecationWarnings = substr_count( $html, '<b>Deprecated</b>' );
+			$deprecationWarnings = substr_count( $warnings, '<b>Deprecated</b>' );
 			if ( $deprecationWarnings > 0 ) {
 				$tags[] = 'deprecation-warnings';
 			} else {
