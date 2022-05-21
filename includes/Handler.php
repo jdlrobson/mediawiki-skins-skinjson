@@ -58,6 +58,7 @@ class Handler extends Rest\Handler {
 	 * @throws LocalizedHttpException
 	 */
 	public function execute() {
+		$services = MediaWikiServices::getInstance();
 		$skins = $this->getSkinsJSON( $services );
 		$response = $this->getResponseFactory()->createJson( [ 'skins' => $skins ] );
 		$response->setHeader( 'Access-Control-Allow-Origin', '*' );
