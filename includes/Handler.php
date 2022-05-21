@@ -81,7 +81,7 @@ class Handler extends Rest\Handler {
 	}
 
 	private function getResponseJSON() {
-		$cacheFilePath = getcwd() . '/cache-skins-json-response';
+		$cacheFilePath = dirname( __FILE__ ) . '/cache-skins-json-response.txt';
 		$cached = file_get_contents($cacheFilePath);
 		if ( $cached ) {
 			$cached = json_decode( $cached, true );
@@ -91,6 +91,7 @@ class Handler extends Rest\Handler {
 		}
 
 		// otherwise generate...
+		$services = MediaWikiServices::getInstance();
 		$skins = $this->getSkinsJSON( $services );
 		$args = $this->getValidatedParams();
 		$json = [ 'skins' => $skins, 'timestamp' => date( 'Y-m-d' ) ];
@@ -106,7 +107,6 @@ class Handler extends Rest\Handler {
 		$reg = ExtensionRegistry::getInstance();
 		$installed = $reg->getAllThings();
 		$skins = [];
-		$services = MediaWikiServices::getInstance();
 		$factory = $services->getSkinFactory();
 		$wanCache = $services->getMainWANObjectCache();
 		$key = $wanCache->makeKey( 'skinjson-rest-handler-json' );
