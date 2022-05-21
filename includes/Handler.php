@@ -92,7 +92,7 @@ class Handler extends Rest\Handler {
 				foreach( $validSkins as $skinkey => $validSkinInfo ) {
 					$json = json_decode( file_get_contents( $info['path'] ), true );
 					$compatibility = $json['requires']['MediaWiki'] ?? null;
-					$info['compatible'] = $compatibility;
+					$info['compatibility'] = $compatibility;
 					$info['hooks'] = array_keys( $json['Hooks'] ?? [] );
 					$info += $this->getMeta( $factory, $skinkey );
 					$skins[ $skinkey ] = $info;
