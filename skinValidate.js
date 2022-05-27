@@ -71,7 +71,7 @@ $(function () {
         }
     };
 
-    function scoreIt( r, who, offset ) {
+    function scoreIt( r, who ) {
         const improvements = [];
         let score = 0;
         Object.keys(r).forEach((rule) => {
@@ -82,26 +82,32 @@ $(function () {
             }
         });
         const grade = scoreToGrade( score, r );
+
+        let container = document.querySelector( '.skinjson-scores' );
+        if ( !container ) {
+            container = document.createElement( 'div' );
+            container.classList.add( 'skinjson-scores' );
+            document.body.appendChild( container );
+        }
+
         $( '<div>' ).addClass(
             `skinjson-score skinjson-score-${grade.label}`
-        ).css( {
-            right: `${((offset*40) + (8 + (8 * offset)))}px`,
-        } ).attr(
+        ).attr(
             'title', 
             improvements.length ?
                 `Scoring by SkinJSON.\nPossible improvements for ${who}:\n${improvements.join('\n')}` :
                 `Skin passed all tests for ${who}`
         ).text( grade.name ).on( 'click', (ev) => {
             ev.target.parentNode.removeChild( ev.target );
-        }).appendTo( document.body );
+        }).appendTo( container );
     }
-    scoreIt( rules, 'Readers', 0 );
+    scoreIt( rules, 'Readers' );
 
     if ( !isAnon ) {
         rulesAdvancedUsers['May not support notifications'] = $( '#pt-notifications-alert' ).length !== 0;
         rulesAdvancedUsers['Supports extensions extending personal tools'] = $(
             '#pt-skin-json-hook-validation-user-menu'
         ).length !== 0;
-        scoreIt( rulesAdvancedUsers, 'Advanced users', 1 );
+        scoreIt( rulesAdvancedUsers, 'Advanced users' );
     }
 });
