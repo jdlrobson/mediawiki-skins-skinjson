@@ -42,7 +42,7 @@ $(function () {
         rules['Skin may not show language menu'] = $( '.mw-portlet-lang' ).length !== 0;
     }
     if ( mw.loader.getState('ext.uls.interface') !== null ) {
-        rules['Skin does not supoport compact ULS language menu'] = $( '.mw-portlet-lang ul, #p-lang ul, .mw-interlanguage-selector' ).length !== 0;
+        rules['Skin does not support compact ULS language menu'] = $( '.mw-portlet-lang ul, #p-lang ul, .mw-interlanguage-selector' ).length !== 0;
     }
     if ( pageHasCategories ) {
         rules['Skin may not show categories'] = $( '.mw-normal-catlinks' ).length !== 0;
