@@ -3,23 +3,28 @@ $(function () {
     const validateConfig = mw.config.get('wgSkinJSONValidate', {});
     const pageExists = mw.config.get( 'wgCurRevisionId' ) !== 0;
     const pageHasCategories =  mw.config.get( 'wgCategories', [] ).length;
-    const rulesAdvancedUsers = {
-        'Does not show personal menu in a gadget compatible way': $( '#p-personal' ).length !== 0,
-        'Does not have the #ca-edit edit button': $('#ca-edit').length !== 0
-    };
+
+    // Rules objects
+    // Key - Label message that is shown in info when false
+    // Value - Condition to check; True -> Pass; False -> Fail
     const rules = {
-        'Does not show the article': $( '.mw-body-content' ).length > 0,
-        'Does not supports site notices (banners)': $( '.skin-json-banner-validation-element' ).length > 0,
-        'Is not responsive': $('meta[name="viewport"]').length > 0,
-        'May not show sidebar main navigation': $( '#n-mainpage-description' ).length !== 0,
-        'May not support search autocomplete': $('.mw-searchInput,#searchInput').length > 0,
-        'Supports extensions extending the sidebar': $(
+        'Skin does not show the article': $( '.mw-body-content' ).length > 0,
+        'Skin does not support site notices (banners)': $( '.skin-json-banner-validation-element' ).length > 0,
+        'Skin is not responsive': $('meta[name="viewport"]').length > 0,
+        'Search may not support autocomplete': $('.mw-searchInput,#searchInput').length > 0,
+        'Sidebar may not show main navigation': $( '#n-mainpage-description' ).length !== 0,
+        'Sidebar may not support extensions': $(
             '.skin-json-validation-element-SidebarBeforeOutput'
         ).length !== 0
     };
+    const rulesAdvancedUsers = {
+        'Personal menu may not support gadgets (#p-personal)': $( '#p-personal' ).length !== 0,
+        'Edit button may not be standard (#ca-edit)': $('#ca-edit').length !== 0
+    };
+
     if ( validateConfig.wgLogos ) {
         const logos = validateConfig.wgLogos || {};
-        rules['Does not seem to support wordmarks'] = !(
+        rules['Skin may not support wordmarks'] = !(
             Array.from(document.querySelectorAll( 'img' ))
                 .filter((n) => {
                     const src = n.getAttribute('src');
@@ -29,19 +34,19 @@ $(function () {
         );
     }
     if ( $('.mw-parser-output h2').length > 3 ) {
-        rules['May not include a table of contents'] = $('.toc').length !== 0;
+        rules['Skin may not include a table of content'] = $('.toc').length !== 0;
     }
     if ( pageExists ) {
-        rules['May not link to the history page in the standard way'] = $('#ca-history').length !== 0;
-        rules['May not display copyright'] = $('#footer-info-copyright, #f-list #copyright, .footer-info-copyright').length !== 0;
-        rules['May not support languages'] = $( '.mw-portlet-lang' ).length !== 0;
+        rules['History button may not be standard (#ca-history)'] = $('#ca-history').length !== 0;
+        rules['Footer may not display copyright'] = $('#footer-info-copyright, #f-list #copyright, .footer-info-copyright').length !== 0;
+        rules['Skin may not show language menu'] = $( '.mw-portlet-lang' ).length !== 0;
     }
     if ( mw.loader.getState('ext.uls.interface') !== null ) {
-        rules['Does not support ULS compact language links'] = $( '.mw-portlet-lang ul, #p-lang ul, .mw-interlanguage-selector' ).length !== 0;
+        rules['Skin does not supoport compact ULS language menu'] = $( '.mw-portlet-lang ul, #p-lang ul, .mw-interlanguage-selector' ).length !== 0;
     }
     if ( pageHasCategories ) {
-        rules['May not support hidden categories'] = $( '.mw-hidden-catlinks' ).length !== 0;
-        rules['May not support categories'] = $( '.mw-normal-catlinks' ).length !== 0;
+        rules['Skin may not show categories'] = $( '.mw-normal-catlinks' ).length !== 0;
+        rules['Skin may not show hidden categories'] = $( '.mw-hidden-catlinks' ).length !== 0;
     }
     const enabledHooks = Array.from(
         new Set(
@@ -105,8 +110,8 @@ $(function () {
     scoreIt( rules, 'Readers', 0 );
 
     if ( !isAnon ) {
-        rulesAdvancedUsers['May not support notifications'] = $( '#pt-notifications-alert' ).length !== 0;
-        rulesAdvancedUsers['Supports extensions extending personal tools'] = $(
+        rulesAdvancedUsers['Skin may not support notifications'] = $( '#pt-notifications-alert' ).length !== 0;
+        rulesAdvancedUsers['Personal menu may not support extensions'] = $(
             '#pt-skin-json-hook-validation-user-menu'
         ).length !== 0;
         scoreIt( rulesAdvancedUsers, 'Advanced users', 1 );
