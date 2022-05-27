@@ -82,17 +82,11 @@ $(function () {
             }
         });
         const grade = scoreToGrade( score, r );
-        $( '<div>' ).css( {
-            width: '40px',
-            height: '40px',
-            position: 'fixed',
-            bottom: '8px',
-            textAlign: 'center',
+        $( '<div>' ).addClass(
+            'skinjson-score'
+        ).css( {
             right: `${((offset*40) + (8 + (8 * offset)))}px`,
-            fontSize: '0.7em',
             background: grade.bg,
-            color: 'black',
-            zIndex: 1000
         } ).attr(
             'title', 
             improvements.length ?
