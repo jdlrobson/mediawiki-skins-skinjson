@@ -63,11 +63,11 @@ $(function () {
         const name = `${s} / ${total}`;
         const pc = s / total;
         if ( pc > 0.7 ) {
-            return { name, bg: 'green' };
+            return { name, label: 'high' };
         } else if ( pc > 0.5 ) {
-            return { name, bg: 'orange' };
+            return { name, label: 'med' };
         } else {
-            return { name, bg: 'red' };
+            return { name, label: 'low' };
         }
     };
 
@@ -83,10 +83,9 @@ $(function () {
         });
         const grade = scoreToGrade( score, r );
         $( '<div>' ).addClass(
-            'skinjson-score'
+            `skinjson-score skinjson-score-${grade.label}`
         ).css( {
             right: `${((offset*40) + (8 + (8 * offset)))}px`,
-            background: grade.bg,
         } ).attr(
             'title', 
             improvements.length ?
