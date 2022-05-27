@@ -83,23 +83,31 @@ $(function () {
         });
         const grade = scoreToGrade( score, r );
 
-        let container = document.querySelector( '.skinjson-scores' );
-        if ( !container ) {
-            container = document.createElement( 'div' );
-            container.classList.add( 'skinjson-scores' );
-            document.body.appendChild( container );
-        }
+        const createContainer = () => {
+            const el = document.createElement( 'div' );
+            el.classList.add( 'skinjson-scores' );
+            document.body.appendChild( el );
+            return el;
+        };
+        const container = document.querySelector( '.skinjson-scores' ) ?? createContainer();
 
-        $( '<div>' ).addClass(
-            `skinjson-score skinjson-score-${grade.label}`
-        ).attr(
-            'title', 
-            improvements.length ?
-                `Scoring by SkinJSON.\nPossible improvements for ${who}:\n${improvements.join('\n')}` :
-                `Skin passed all tests for ${who}`
-        ).text( grade.name ).on( 'click', (ev) => {
+        // NOTE: Maybe this should be put into some kind of template,
+        // maybe HTML template tag or Mustache or template literals
+        const scorebox = document.createElement( 'div' );
+        scorebox.classList.add( 'skinjson-score', `skinjson-score-${grade.label}` );
+        scorebox.textContent = grade.name;
+
+        const scoreinfo = document.createElement( 'div' );
+        scoreinfo.classList.add( 'skinjson-score-info' );
+        scoreinfo.innerText = improvements.length ? 
+            `Scoring by SkinJSON.\nPossible improvements for ${who}:\n${improvements.join('\n')}` :
+            `Skin passed all tests for ${who}`;
+        scorebox.appendChild( scoreinfo );
+
+        container.appendChild( scorebox );
+        scorebox.addEventListener( 'click', ( ev ) => {
             ev.target.parentNode.removeChild( ev.target );
-        }).appendTo( container );
+        } );
     }
     scoreIt( rules, 'Readers' );
 
