@@ -31,6 +31,7 @@
 			"es6": true,
 			"dependencies": [ "mediawiki.user" ],
 			"scripts": [ "skinValidate.js" ],
+			"styles": [ "skinValidate.less" ],
 			"targets": [ "desktop", "mobile" ]
 		},
 		"skins.skinjson.debug.styles": {

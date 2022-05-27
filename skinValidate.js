@@ -63,15 +63,15 @@ $(function () {
         const name = `${s} / ${total}`;
         const pc = s / total;
         if ( pc > 0.7 ) {
-            return { name, bg: 'green' };
+            return { name, label: 'high' };
         } else if ( pc > 0.5 ) {
-            return { name, bg: 'orange' };
+            return { name, label: 'med' };
         } else {
-            return { name, bg: 'red' };
+            return { name, label: 'low' };
         }
     };
 
-    function scoreIt( r, who, offset ) {
+    function scoreIt( r, who ) {
         const improvements = [];
         let score = 0;
         Object.keys(r).forEach((rule) => {
@@ -82,33 +82,40 @@ $(function () {
             }
         });
         const grade = scoreToGrade( score, r );
-        $( '<div>' ).css( {
-            width: '40px',
-            height: '40px',
-            position: 'fixed',
-            bottom: '8px',
-            textAlign: 'center',
-            right: `${((offset*40) + (8 + (8 * offset)))}px`,
-            fontSize: '0.7em',
-            background: grade.bg,
-            color: 'black',
-            zIndex: 1000
-        } ).attr(
-            'title', 
-            improvements.length ?
-                `Scoring by SkinJSON.\nPossible improvements for ${who}:\n${improvements.join('\n')}` :
-                `Skin passed all tests for ${who}`
-        ).text( grade.name ).on( 'click', (ev) => {
+
+        const createContainer = () => {
+            const el = document.createElement( 'div' );
+            el.classList.add( 'skinjson-scores' );
+            document.body.appendChild( el );
+            return el;
+        };
+        const container = document.querySelector( '.skinjson-scores' ) ?? createContainer();
+
+        // NOTE: Maybe this should be put into some kind of template,
+        // maybe HTML template tag or Mustache or template literals
+        const scorebox = document.createElement( 'div' );
+        scorebox.classList.add( 'skinjson-score', `skinjson-score-${grade.label}` );
+        scorebox.textContent = grade.name;
+
+        const scoreinfo = document.createElement( 'div' );
+        scoreinfo.classList.add( 'skinjson-score-info' );
+        scoreinfo.innerText = improvements.length ? 
+            `Scoring by SkinJSON.\nPossible improvements for ${who}:\n${improvements.join('\n')}` :
+            `Skin passed all tests for ${who}`;
+        scorebox.appendChild( scoreinfo );
+
+        container.appendChild( scorebox );
+        scorebox.addEventListener( 'click', ( ev ) => {
             ev.target.parentNode.removeChild( ev.target );
-        }).appendTo( document.body );
+        } );
     }
-    scoreIt( rules, 'Readers', 0 );
+    scoreIt( rules, 'Readers' );
 
     if ( !isAnon ) {
         rulesAdvancedUsers['May not support notifications'] = $( '#pt-notifications-alert' ).length !== 0;
         rulesAdvancedUsers['Supports extensions extending personal tools'] = $(
             '#pt-skin-json-hook-validation-user-menu'
         ).length !== 0;
-        scoreIt( rulesAdvancedUsers, 'Advanced users', 1 );
+        scoreIt( rulesAdvancedUsers, 'Advanced users' );
     }
 });
