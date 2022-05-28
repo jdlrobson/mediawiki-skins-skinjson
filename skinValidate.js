@@ -129,9 +129,6 @@ $(function () {
         scorebox.appendChild( scoreinfo );
 
         container.appendChild( scorebox );
-        scorebox.addEventListener( 'click', ( ev ) => {
-            ev.target.parentNode.removeChild( ev.target );
-        } );
     }
 
     scoreIt( rules, 'Readers' );
