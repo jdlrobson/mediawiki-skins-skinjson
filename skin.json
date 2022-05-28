@@ -65,12 +65,14 @@
 	},
 	"config": {
 		"SkinJSONTestUser": "",
+		"SkinJSONExtensionHints": true,
 		"SkinJSONDebug": true,
 		"SkinJSONValidate": true
 	},
 	"Hooks": {
 		"SiteNoticeAfter": "SkinJSON::onSiteNoticeAfter",
 		"SidebarBeforeOutput": "SkinJSON::onSidebarBeforeOutput",
+		"OutputPageBodyAttributes": "SkinJSON::onOutputPageBodyAttributes",
 		"OutputPageBeforeHTML": "SkinJSON::onOutputPageBeforeHTML",
 		"RequestContextCreateSkin": "SkinJSON::onRequestContextCreateSkin",
 		"SkinAfterPortlet": "SkinJSON::onSkinAfterPortlet",

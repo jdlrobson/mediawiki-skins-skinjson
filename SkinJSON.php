@@ -46,9 +46,7 @@ class SkinJSON extends SkinMustache {
 		$empty = strlen( $siteNotice ) === 0;
 		$config = $skin->getConfig();
 		if ( $config->get( 'SkinJSONValidate' ) ) {
-			$siteNotice .= Html::element( 'div', [
-				'class' => 'skin-json-banner-validation-element skin-json-validation-element',
-			], '' );
+			$siteNotice .= self::hookTestElement( 'SiteNoticeAfter', $config, false );
 			return $empty;
 		}
 	}
@@ -59,6 +57,12 @@ class SkinJSON extends SkinMustache {
 		$wgRestAPIAdditionalRouteFiles[] = wfRelativePath(
 			__DIR__ . '/restRoutes.json', $IP
 		);
+	}
+
+	public static function onOutputPageBodyAttributes( $out, $sk, &$bodyAttrs ): void {
+		if ( !$out->getConfig()->get( 'SkinJSONExtensionHints' ) ) {
+			$bodyAttrs['class'] .= ' skin-json-hints-hide';
+		}
 	}
 
 	/**
@@ -72,6 +76,9 @@ class SkinJSON extends SkinMustache {
 			$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
 		}
 		if ( $config->get( 'SkinJSONValidate' ) ) {
+			$out->addSubtitle(
+				self::hookTestElement( 'OutputPageBeforeHTML', $config, false, 'Call addSubtitle on OutputPage' )
+			);
 			$out->addJsConfigVars( [
 				'wgSkinJSONValidate' => [
 					'wgLogos' => ResourceLoaderSkinModule::getAvailableLogos(
@@ -82,7 +89,10 @@ class SkinJSON extends SkinMustache {
 			$out->addHTML(
 				implode( '', [
 					'<style type="text/css">',
-					'.skin-json-validation-element { display: none !important; }',
+					'.skin-json-hints-hide .skin-json-validation-element { display: none !important; }',
+					'.skin-json-validation-element { background: #00af89; }',
+					'.skin-json-validation-element-block { padding: 20px; }',
+					'.skin-json-validation-element a { color: #fff; }',
 					'</style>'
 				] )
 			);
@@ -94,28 +104,57 @@ class SkinJSON extends SkinMustache {
 		}
 	}
 
-	private static function hookTestElement( string $hook, Config $config ) {
+	private static function hookTestData( string $hook, Config $config, $inline = true, $note = '' ) {
+		$hookUrl = '//www.mediawiki.org/wiki/Manual:Hooks/' . $hook;
 		if ( $config->get( 'SkinJSONValidate' ) ) {
-			return Html::element( 'div', [
-				'class' => 'skin-json-hook-validation-element skin-json-validation-element',
+			$link = Html::element( 'a', [
+				'href' => $hookUrl,
+				'title' => $note
+			], $hook );
+			return [
+				'title' => $note,
+				'class' => [
+					'skin-json-hook-validation-element',
+					'skin-json-hook-validation-element-' . $hook,
+					'skin-json-validation-element',
+					$inline ? 'skin-json-validation-element-inline' : 'skin-json-validation-element-block'
+				],
+				'html' => $link,
 				'data-hook' => $hook,
-			], '' );
+			];
+		} else {
+			return [];
+		}
+	}
+
+	private static function hookTestElement( string $hook, Config $config, $inline = true, $note = '' ) {
+		if ( $config->get( 'SkinJSONValidate' ) ) {
+			$data = self::hookTestData( $hook, $config, $inline, $note );
+			$link = $data['html'];
+			unset( $data['html'] );
+			return Html::rawElement( 'div', $data, $link );
 		} else {
 			return '';
 		}
 	}
 
 	public static function onSkinAfterPortlet( $skin, $name, &$html ) {
-		$html .= self::hookTestElement( 'SkinAfterPortlet', $skin->getConfig() );
+		$html .= self::hookTestElement(
+			'SkinAfterPortlet',
+			$skin->getConfig(),
+			// only these ones are inline
+			in_array( $name, [ 'navigation', 'namespaces', 'views' ] ),
+			'($name === "' . $name . '")'
+		);
 	}
 
 	public static function onSkinAfterContent( &$html, Skin $skin ) {
-		$html .= self::hookTestElement( 'SkinAfterContent', $skin->getConfig() );
+		$html .= self::hookTestElement( 'SkinAfterContent', $skin->getConfig(), false );
 	}
 
 	public static function onSkinAddFooterLinks( Skin $skin, string $key, array &$footerlinks  ) {
 		if ( $key === 'places' ) {
-			$footerlinks['test'] = self::hookTestElement( 'SkinAddFooterLinks', $skin->getConfig() );
+			$footerlinks['test'] = self::hookTestElement( 'SkinAddFooterLinks', $skin->getConfig(), true, '($key === places)' );
 		}
 	}
 
@@ -129,12 +168,12 @@ class SkinJSON extends SkinMustache {
 	}
 
 	public static function onSidebarBeforeOutput( Skin $skin, &$sidebar ) {
-		$sidebar['navigation']['skin-json-hook-validation-sidebar-item'] = [
-			'class' => [
-				'skin-json-validation-element',
-				'skin-json-validation-element-SidebarBeforeOutput'
-			],
-		];
+		$sidebar['navigation']['skin-json-hook-validation-sidebar-item'] = self::hookTestData(
+			'SidebarBeforeOutput',
+			$skin->getConfig(),
+			true,
+			'(appending to $sidebar["navigation"])'
+		);
 	}
 
 	private static function isSkinJSONMode( $request ) {
