@@ -63,6 +63,33 @@ $(function () {
         rules[`Does not support the ${hook} hook`] = enabledHooks.indexOf( hook ) > -1;
     } );
 
+    const createContainer = () => {
+        const createToggle = () => {
+            const toggle = document.createElement( 'div' );
+
+            // SkinJSON elements are visible by default
+            toggle.classList.add( 'skin-json-toggle' );
+            toggle.setAttribute( 'title', 'Toggle SkinJSON elements' );
+            toggle.textContent = 'off';
+
+            toggle.addEventListener( 'click', ( ev ) => {
+                // Body class use to hide SkinJSON elements in CSS
+                document.body.classList.toggle( 'skin-json--hidden' );
+                ev.target.classList.toggle( 'skin-json-toggle--on' );
+                ev.target.textContent = ev.target.classList.contains( 'skin-json-toggle--on' ) ? 'on' : 'off';
+            } );
+            return toggle;
+        }
+
+        const el = document.createElement( 'div' );
+        el.classList.add( 'skin-json-overlay' );
+        el.appendChild( createToggle() );
+        document.body.appendChild( el );
+        return el;
+    };
+
+    const container = document.querySelector( '.skin-json-overlay' ) ?? createContainer();
+
     const scoreToGrade = (s, r) => {
         const total = Object.keys(r).length;
         const name = `${s} / ${total}`;
@@ -88,22 +115,14 @@ $(function () {
         });
         const grade = scoreToGrade( score, r );
 
-        const createContainer = () => {
-            const el = document.createElement( 'div' );
-            el.classList.add( 'skinjson-scores' );
-            document.body.appendChild( el );
-            return el;
-        };
-        const container = document.querySelector( '.skinjson-scores' ) ?? createContainer();
-
         // NOTE: Maybe this should be put into some kind of template,
         // maybe HTML template tag or Mustache or template literals
         const scorebox = document.createElement( 'div' );
-        scorebox.classList.add( 'skinjson-score', `skinjson-score-${grade.label}` );
+        scorebox.classList.add( 'skin-json-score', `skin-json-score-${grade.label}` );
         scorebox.textContent = grade.name;
 
         const scoreinfo = document.createElement( 'div' );
-        scoreinfo.classList.add( 'skinjson-score-info' );
+        scoreinfo.classList.add( 'skin-json-score-info' );
         scoreinfo.innerText = improvements.length ? 
             `Scoring by SkinJSON.\nPossible improvements for ${who}:\n${improvements.join('\n')}` :
             `Skin passed all tests for ${who}`;
@@ -114,6 +133,7 @@ $(function () {
             ev.target.parentNode.removeChild( ev.target );
         } );
     }
+
     scoreIt( rules, 'Readers' );
 
     if ( !isAnon ) {
