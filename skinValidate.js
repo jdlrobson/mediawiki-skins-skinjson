@@ -4,50 +4,126 @@ $(function () {
     const pageExists = mw.config.get( 'wgCurRevisionId' ) !== 0;
     const pageHasCategories =  mw.config.get( 'wgCategories', [] ).length;
 
-    // Rules objects
-    // Key - Label message that is shown in info when false
-    // Value - Condition to check; True -> Pass; False -> Fail
-    const rules = {
-        'Skin does not show the article': $( '.mw-body-content' ).length > 0,
-        'Skin does not support site notices (banners)': $( '.skin-json-hook-validation-element-SiteNoticeAfter' ).length > 0,
-        'Skin is not responsive': $('meta[name="viewport"]').length > 0,
-        'Search may not support autocomplete': $('.mw-searchInput,#searchInput').length > 0,
-        'Sidebar may not show main navigation': $( '#n-mainpage-description' ).length !== 0,
-        'Sidebar may not support extensions': $(
-            '.skin-json-hook-validation-element-SidebarBeforeOutput'
-        ).length !== 0
-    };
-    const rulesAdvancedUsers = {
-        'Personal menu may not support gadgets (#p-personal)': $( '#p-personal' ).length !== 0,
-        'Edit button may not be standard (#ca-edit)': $('#ca-edit').length !== 0
-    };
+    const rules = [
+        {
+            title: 'Skin does not show the article',
+            description: '',
+            condition: $( '.mw-body-content' ).length > 0
+        },
+        {
+            title: 'Skin does not support site notices (banners)',
+            description: '',
+            condition: $( '.skin-json-hook-validation-element-SiteNoticeAfter' ).length > 0
+        },
+        {
+            title: 'Skin is not responsive',
+            description: '',
+            condition: $( 'meta[name="viewport"]' ).length > 0
+        },
+        {
+            title: 'Search may not support autocomplete',
+            description: '',
+            condition: $( '.mw-searchInput,#searchInput' ).length > 0
+        },
+        {
+            title: 'Sidebar may not show main navigation',
+            description: '',
+            condition: $( '#n-mainpage-description' ).length !== 0
+        },
+        {
+            title: 'Sidebar may not support extensions',
+            description: '',
+            condition: $( '.skin-json-hook-validation-element-SidebarBeforeOutput' ).length !== 0
+        }
+    ];
+
+    const rulesAdvancedUsers = [
+        {
+            title: 'Personal menu may not support gadgets (#p-personal)',
+            description: '',
+            condition: $( '#p-personal' ).length !== 0
+        },
+        {
+            title: 'Edit button may not be standard (#ca-edit)',
+            description: '',
+            condition: $( '#ca-edit' ).length !== 0
+        }
+    ];
 
     if ( validateConfig.wgLogos ) {
-        const logos = validateConfig.wgLogos || {};
-        rules['Skin may not support wordmarks'] = !(
-            Array.from(document.querySelectorAll( 'img' ))
-                .filter((n) => {
-                    const src = n.getAttribute('src');
-                    return ( logos.wordmark && src === logos.wordmark.src ) ||
-                        logos.icon;
-                } ).length === 0 && $( '.mw-wiki-logo' ).length === 0
+        rules.push( 
+            {
+                title: 'Skin may not support wordmarks',
+                description: '',
+                condition: () => {
+                    const logos = validateConfig.wgLogos || {};
+                    !( Array.from(document.querySelectorAll( 'img' ))
+                        .filter((n) => {
+                            const src = n.getAttribute('src');
+                            return ( logos.wordmark && src === logos.wordmark.src ) ||
+                                logos.icon;
+                        } ).length === 0 && $( '.mw-wiki-logo' ).length === 0
+                    );
+                }
+            }
         );
     }
+
     if ( $('.mw-parser-output h2').length > 3 ) {
-        rules['Skin may not include a table of content'] = $('.toc').length !== 0;
+        rules.push( 
+            {
+                title: 'Skin may not include a table of content',
+                description: '',
+                condition: $('.toc').length !== 0
+            }
+        );
     }
+
     if ( pageExists ) {
-        rules['History button may not be standard (#ca-history)'] = $('#ca-history').length !== 0;
-        rules['Footer may not display copyright'] = $('#footer-info-copyright, #f-list #copyright, .footer-info-copyright').length !== 0;
-        rules['Skin may not show language menu'] = $( '.mw-portlet-lang' ).length !== 0;
+        rules.push( 
+            {
+                title: 'History button may not be standard (#ca-history)',
+                description: '',
+                condition: $('#ca-history').length !== 0
+            },
+            {
+                title: 'Footer may not display copyright',
+                description: '',
+                condition: $('#footer-info-copyright, #f-list #copyright, .footer-info-copyright').length !== 0
+            },
+            {
+                title: 'Skin may not show language menu',
+                description: '',
+                condition: $( '.mw-portlet-lang' ).length !== 0
+            }
+        );
     }
+
     if ( mw.loader.getState('ext.uls.interface') !== null ) {
-        rules['Skin does not support compact ULS language menu'] = $( '.mw-portlet-lang ul, #p-lang ul, .mw-interlanguage-selector' ).length !== 0;
+        rules.push( 
+            {
+                title: 'Skin does not support compact ULS language menu',
+                description: '',
+                condition: $( '.mw-portlet-lang ul, #p-lang ul, .mw-interlanguage-selector' ).length !== 0
+            }
+        );
     }
+
     if ( pageHasCategories ) {
-        rules['Skin may not show categories'] = $( '.mw-normal-catlinks' ).length !== 0;
-        rules['Skin may not show hidden categories'] = $( '.mw-hidden-catlinks' ).length !== 0;
+        rules.push( 
+            {
+                title: 'Skin may not show categories',
+                description: '',
+                condition: $( '.mw-normal-catlinks' ).length !== 0
+            },
+            {
+                title: 'Skin may not show hidden categories',
+                description: '',
+                condition: $( '.mw-hidden-catlinks' ).length !== 0
+            }
+        );
     }
+
     const enabledHooks = Array.from(
         new Set(
             Array.from(
@@ -60,7 +136,13 @@ $(function () {
         'SkinAddFooterLinks',
         'SkinAfterPortlet'
     ].forEach( ( hook ) => {
-        rules[`Does not support the ${hook} hook`] = enabledHooks.indexOf( hook ) > -1;
+        rules.push( 
+            {
+                title: `Does not support the ${hook} hook`,
+                description: '',
+                condition: enabledHooks.indexOf( hook ) > -1
+            }
+        );
     } );
 
     const createContainer = () => {
@@ -106,11 +188,11 @@ $(function () {
     function scoreIt( r, who ) {
         const improvements = [];
         let score = 0;
-        Object.keys(r).forEach((rule) => {
-            if ( r[rule] === true ) {
+        r.forEach( ( rule ) => {
+            if (  rule.condition === true ) {
                 score++;
             } else {
-                improvements.push(rule);
+                improvements.push( rule.title );
             }
         });
         const grade = scoreToGrade( score, r );
@@ -134,10 +216,18 @@ $(function () {
     scoreIt( rules, 'Readers' );
 
     if ( !isAnon ) {
-        rulesAdvancedUsers['Skin may not support notifications'] = $( '#pt-notifications-alert' ).length !== 0;
-        rulesAdvancedUsers['Personal menu may not support extensions'] = $(
-            '#pt-skin-json-hook-validation-user-menu'
-        ).length !== 0;
+        rulesAdvancedUsers.push( 
+            {
+                title: 'Skin may not support notifications',
+                description: '',
+                condition: $( '#pt-notifications-alert' ).length !== 0
+            },
+            {
+                title: 'Personal menu may not support extensions',
+                description: '',
+                condition: $( '#pt-skin-json-hook-validation-user-menu' ).length !== 0
+            }
+        );
         scoreIt( rulesAdvancedUsers, 'Advanced users' );
     }
 });
