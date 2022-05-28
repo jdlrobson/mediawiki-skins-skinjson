@@ -70,13 +70,13 @@ $(function () {
             // SkinJSON elements are visible by default
             toggle.classList.add( 'skin-json-toggle' );
             toggle.setAttribute( 'title', 'Toggle SkinJSON elements' );
-            toggle.textContent = 'off';
+            toggle.textContent = 'hide';
 
             toggle.addEventListener( 'click', ( ev ) => {
                 // Body class use to hide SkinJSON elements in CSS
                 document.body.classList.toggle( 'skin-json--hidden' );
                 ev.target.classList.toggle( 'skin-json-toggle--on' );
-                ev.target.textContent = ev.target.classList.contains( 'skin-json-toggle--on' ) ? 'on' : 'off';
+                ev.target.textContent = ev.target.classList.contains( 'skin-json-toggle--on' ) ? 'show' : 'hide';
             } );
             return toggle;
         }
