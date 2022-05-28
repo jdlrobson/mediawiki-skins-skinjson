@@ -42,7 +42,7 @@ class SkinJSON extends SkinMustache {
 		return parent::getUser();
 	}
 
-	public static function onSiteNoticeBefore( &$siteNotice, $skin ) {
+	public static function onSiteNoticeAfter( &$siteNotice, $skin ) {
 		$empty = strlen( $siteNotice ) === 0;
 		$config = $skin->getConfig();
 		if ( $config->get( 'SkinJSONValidate' ) ) {
