@@ -9,12 +9,12 @@ $(function () {
     // Value - Condition to check; True -> Pass; False -> Fail
     const rules = {
         'Skin does not show the article': $( '.mw-body-content' ).length > 0,
-        'Skin does not support site notices (banners)': $( '.skin-json-banner-validation-element' ).length > 0,
+        'Skin does not support site notices (banners)': $( '.skin-json-hook-validation-element-SiteNoticeAfter' ).length > 0,
         'Skin is not responsive': $('meta[name="viewport"]').length > 0,
         'Search may not support autocomplete': $('.mw-searchInput,#searchInput').length > 0,
         'Sidebar may not show main navigation': $( '#n-mainpage-description' ).length !== 0,
         'Sidebar may not support extensions': $(
-            '.skin-json-validation-element-SidebarBeforeOutput'
+            '.skin-json-hook-validation-element-SidebarBeforeOutput'
         ).length !== 0
     };
     const rulesAdvancedUsers = {
