@@ -1,48 +1,79 @@
-.skinjson-scores {
-	position: fixed;
-	z-index: 1000;
-	right: 8px;
-	bottom: 8px;
-	display: flex;
-	gap: 8px;
-}
+.skin-json {
+	&-overlay {
+		position: fixed;
+		z-index: 1000;
+		right: 8px;
+		bottom: 8px;
+		display: flex;
+		flex-direction: row-reverse;
+		gap: 8px;
 
-.skinjson-score {
-	position: relative;
-	width: 40px;
-	height: 40px;
-	font-size: 0.7em;
-	text-align: center;
-
-	&-high {
-		background-color: #00af89; // WMUI Green 50
-		color: #fff;
+		// This is temporary
+		> div {
+			display: grid;
+			width: 40px;
+			height: 40px;
+			cursor: pointer;
+			font-size: 0.7em;
+			place-content: center;
+			user-select: none;
+		}
 	}
 
-	&-med {
-		background-color: #fc3; // WMUI Yellow 50
-		color: #000;
-	}
-
-	&-low {
+	&-toggle {
 		background-color: #d33; // WMUI Red 50
 		color: #fff;
+		text-transform: uppercase;
+
+		&--on {
+			background-color: #00af89; // WMUI Green 50
+			color: #fff;
+		}
 	}
 
-	// Popup
-	&-info {
-		position: absolute;
-    	bottom: 100%;
-    	margin-bottom: 8px;
-    	right: 0;
-    	background: inherit;
-    	width: 200px;
-    	text-align: left;
-    	padding: 8px;
-    	display: none;
+	&-score {
+		position: relative;
+
+		&-high {
+			background-color: #00af89; // WMUI Green 50
+			color: #fff;
+		}
+
+		&-med {
+			background-color: #fc3; // WMUI Yellow 50
+			color: #000;
+		}
+
+		&-low {
+			background-color: #d33; // WMUI Red 50
+			color: #fff;
+		}
+
+		// Popup
+		&-info {
+			position: absolute;
+			right: 0;
+			bottom: 100%;
+			display: none;
+			width: 200px;
+			padding: 8px;
+			margin-bottom: 8px;
+			background: inherit;
+			text-align: left;
+		}
+
+		&:hover &-info {
+			display: block;
+		}
 	}
 
-	&:hover &-info {
-		display: block;
+	// Hide SkinJSON elements
+	&--hidden {
+		.skin-json {
+			&-score,
+			&-validation-element {
+				display: none;
+			}
+		}
 	}
 }
