@@ -90,9 +90,7 @@ class SkinJSON extends SkinMustache {
 				implode( '', [
 					'<style type="text/css">',
 					'.skin-json-hints-hide .skin-json-validation-element { display: none !important; }',
-					'.skin-json-validation-element { display: none; background: #00af89; }',
-					'.skin-json-validation-element-block { padding: 20px; }',
-					'.skin-json-validation-element a { color: #fff; }',
+					'.skin-json-validation-element { display: none; }',
 					'</style>'
 				] )
 			);
