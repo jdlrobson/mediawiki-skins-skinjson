@@ -1,4 +1,18 @@
 .skin-json {
+	&-validation {
+		&-element {
+			background: #00af89;
+
+			&-block {
+				padding: 20px;
+			}
+
+			a {
+				color: #fff;
+			}
+		}
+	}
+
 	&-overlay {
 		position: fixed;
 		z-index: 1000;
@@ -10,7 +24,6 @@
 
 		// This is temporary
 		> div {
-			display: grid;
 			width: 40px;
 			height: 40px;
 			cursor: pointer;
@@ -21,18 +34,20 @@
 	}
 
 	&-toggle {
-		background-color: #d33; // WMUI Red 50
+		display: grid;
+		background-color: #00af89; // WMUI Green 50
 		color: #fff;
 		text-transform: uppercase;
 
-		&--on {
-			background-color: #00af89; // WMUI Green 50
+		&--off {
+			background-color: #d33; // WMUI Red 50
 			color: #fff;
 		}
 	}
 
 	&-score {
 		position: relative;
+		display: none;
 
 		&-high {
 			background-color: #00af89; // WMUI Green 50
@@ -67,12 +82,21 @@
 		}
 	}
 
-	// Hide SkinJSON elements
-	&--hidden {
+	// Show SkinJSON elements
+	&--visible {
 		.skin-json {
-			&-score,
+			&-score {
+				display: grid;
+			}
+
 			&-validation-element {
-				display: none;
+				&-block {
+					display: block;
+				}
+
+				&-inline {
+					display: inline-block;
+				}
 			}
 		}
 	}

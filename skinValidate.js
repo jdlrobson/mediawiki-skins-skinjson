@@ -149,16 +149,16 @@ $(function () {
         const createToggle = () => {
             const toggle = document.createElement( 'div' );
 
-            // SkinJSON elements are visible by default
+            // SkinJSON elements are hidden by default
             toggle.classList.add( 'skin-json-toggle' );
             toggle.setAttribute( 'title', 'Toggle SkinJSON elements' );
-            toggle.textContent = 'hide';
+            toggle.textContent = 'show';
 
             toggle.addEventListener( 'click', ( ev ) => {
-                // Body class use to hide SkinJSON elements in CSS
-                document.body.classList.toggle( 'skin-json--hidden' );
-                ev.target.classList.toggle( 'skin-json-toggle--on' );
-                ev.target.textContent = ev.target.classList.contains( 'skin-json-toggle--on' ) ? 'show' : 'hide';
+                // Body class use to show SkinJSON elements in CSS
+                document.body.classList.toggle( 'skin-json--visible' );
+                ev.target.classList.toggle( 'skin-json-toggle--off' );
+                ev.target.textContent = ev.target.classList.contains( 'skin-json-toggle--off' ) ? 'hide' : 'show';
             } );
             return toggle;
         }

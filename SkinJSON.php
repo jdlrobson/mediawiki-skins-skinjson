@@ -86,13 +86,12 @@ class SkinJSON extends SkinMustache {
 					),
 				],
 			] );
-			$out->addHTML(
+			$out->addHeadItem(
+				'skins.skinjson.inline.styles',
 				implode( '', [
-					'<style type="text/css">',
+					'<style id="skinjson-style">',
 					'.skin-json-hints-hide .skin-json-validation-element { display: none !important; }',
-					'.skin-json-validation-element { background: #00af89; }',
-					'.skin-json-validation-element-block { padding: 20px; }',
-					'.skin-json-validation-element a { color: #fff; }',
+					'.skin-json-validation-element { display: none; }',
 					'</style>'
 				] )
 			);
