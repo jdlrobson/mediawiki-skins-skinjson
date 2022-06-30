@@ -173,7 +173,7 @@ class SkinJSON extends SkinMustache {
 			'SidebarBeforeOutput',
 			$skin->getConfig(),
 			true,
-			'(appending to $sidebar["navigation"])'
+			'Append to $sidebar["navigation"]'
 		);
 	}
 
