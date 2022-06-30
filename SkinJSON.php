@@ -106,10 +106,12 @@ class SkinJSON extends SkinMustache {
 	private static function hookTestData( string $hook, Config $config, $inline = true, $note = '' ) {
 		$hookUrl = '//www.mediawiki.org/wiki/Manual:Hooks/' . $hook;
 		if ( $config->get( 'SkinJSONValidate' ) ) {
-			$link = Html::element( 'a', [
-				'href' => $hookUrl,
-				'title' => $note
-			], $hook );
+			$title = Html::element('div', [ 'class' => 'skin-json-validation-element__title' ], $hook );
+			$desc = $note ? Html::element('div', [ 'class' => 'skin-json-validation-element__description' ], $note ) : null;
+			$link = Html::rawElement( 'a', [
+					'href' => $hookUrl,
+					'title' => 'View documentation on MediaWiki.org'
+				], $title . $desc );
 			return [
 				'title' => $note,
 				'class' => [
