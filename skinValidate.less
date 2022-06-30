@@ -1,14 +1,41 @@
 .skin-json {
 	&-validation {
 		&-element {
-			background: #00af89;
-
-			&-block {
-				padding: 20px;
-			}
+			--color-skinjson-surface: #eaddff;
+			--color-skinjson-surface--hover: #f6edff;
+			--color-skinjson-surface--active: #d0bcff;
+			--color-skinjson-text: #21005d;
 
 			a {
-				color: #fff;
+				display: block;
+				padding: 0.75rem 1rem;
+				background: var( --color-skinjson-surface );
+				font-size: 0.8125rem;
+				line-height: 1.25;
+				text-align: start;
+				text-decoration: none;
+
+				&:hover {
+					// So user can see it even when it is under another element
+					position: relative;
+					z-index: 1;
+					background: var( --color-skinjson-surface--hover );
+				}
+
+				&:active {
+					background: var( --color-skinjson-surface--active );
+				}
+			}
+
+			&__title {
+				color: var( --color-skinjson-text );
+				font-family: 'Menlo', 'Consolas', 'Liberation Mono', 'Courier New', monospace; // WMUI monospace fonts
+				font-size: 0.875rem;
+				font-weight: bold;
+			}
+
+			&__description {
+				color: #222;
 			}
 		}
 	}
@@ -90,13 +117,7 @@
 			}
 
 			&-validation-element {
-				&-block {
-					display: block;
-				}
-
-				&-inline {
-					display: inline-block;
-				}
+				display: revert;
 			}
 		}
 	}
