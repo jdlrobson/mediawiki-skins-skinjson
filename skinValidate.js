@@ -146,26 +146,36 @@ $(function () {
     } );
 
     const createContainer = () => {
-        const createToggle = () => {
+        const createToggle = ( isInitiallyShown ) => {
             const toggle = document.createElement( 'div' );
 
             // SkinJSON elements are hidden by default
             toggle.classList.add( 'skin-json-toggle' );
+            if ( isInitiallyShown ) {
+                document.body.classList.add( 'skin-json--visible' );
+                toggle.classList.add( 'skin-json-toggle--off' );
+            }
             toggle.setAttribute( 'title', 'Toggle SkinJSON elements' );
-            toggle.textContent = 'show';
+            toggle.textContent = isInitiallyShown ? 'hide': 'show';
 
             toggle.addEventListener( 'click', ( ev ) => {
                 // Body class use to show SkinJSON elements in CSS
                 document.body.classList.toggle( 'skin-json--visible' );
                 ev.target.classList.toggle( 'skin-json-toggle--off' );
-                ev.target.textContent = ev.target.classList.contains( 'skin-json-toggle--off' ) ? 'hide' : 'show';
+                const isEnabled = ev.target.classList.contains( 'skin-json-toggle--off' );
+                ev.target.textContent = isEnabled ? 'hide' : 'show';
+                if ( isEnabled ) {
+                    mw.storage.set( 'SkinJSON-Validate', '1' )
+                } else {
+                    mw.storage.remove( 'SkinJSON-Validate' );
+                }
             } );
             return toggle;
         }
 
         const el = document.createElement( 'div' );
         el.classList.add( 'skin-json-overlay' );
-        el.appendChild( createToggle() );
+        el.appendChild( createToggle( !!mw.storage.get( 'SkinJSON-Validate' ) ) );
         document.body.appendChild( el );
         return el;
     };
