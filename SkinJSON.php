@@ -68,13 +68,10 @@ class SkinJSON extends SkinMustache {
 	/**
 	 * Forwards OutputPageBeforeHTML hook modifications to the template
 	 * This makes SkinJSON work with the MobileFrontend ContentProvider proxy.
+	 * Note this hook doesn't run on certain special pages e.g. Special:Contributions
 	 */
 	public static function onOutputPageBeforeHTML( $out, &$html ) {
 		$config = $out->getConfig();
-		if ( $config->get( 'SkinJSONDebug' ) ) {
-			$out->addModules( [ 'skins.skinjson.debug' ] );
-			$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
-		}
 		if ( $config->get( 'SkinJSONValidate' ) ) {
 			$s = $out->getSubtitle();
 			$msg =  'Call addSubtitle on OutputPage';
@@ -86,6 +83,22 @@ class SkinJSON extends SkinMustache {
 					self::hookTestElement( 'OutputPageBeforeHTML', $config, false, $msg )
 				);
 			}
+		}
+		if ( self::isSkinJSONMode( $out->getContext()->getRequest() ) ) {
+			$out->getSkin()->setTemplateVariable('html-body-content', $html);
+		}
+	}
+
+	/**
+	 * Runs on all pages.
+	 * @param OutputPage $out
+	 */
+	private static function addStylesToPage( OutputPage $out, Config $config ) {
+		if ( $config->get( 'SkinJSONDebug' ) ) {
+			$out->addModules( [ 'skins.skinjson.debug' ] );
+			$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
+		}
+		if ( $config->get( 'SkinJSONValidate' ) ) {
 			$out->addJsConfigVars( [
 				'wgSkinJSONValidate' => [
 					'wgLogos' => ResourceLoaderSkinModule::getAvailableLogos(
@@ -105,9 +118,16 @@ class SkinJSON extends SkinMustache {
 			$out->addModules( [ 'skins.skinjson.validate' ] );
 			$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
 		}
-		if ( self::isSkinJSONMode( $out->getContext()->getRequest() ) ) {
-			$out->getSkin()->setTemplateVariable('html-body-content', $html);
-		}
+	}
+
+	/**
+	 * Runs on all pages.
+	 *
+	 * @param OutputPage $out
+	 * @param Skin $skin
+	 */
+	public static function onBeforePageDisplay( $out, $skin ) {
+		self::addStylesToPage( $out, $out->getConfig() );
 	}
 
 	private static function hookTestData( string $hook, Config $config, $inline = true, $note = '' ) {
