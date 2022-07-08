@@ -76,9 +76,16 @@ class SkinJSON extends SkinMustache {
 			$out->addModuleStyles( [ 'skins.skinjson.debug.styles' ] );
 		}
 		if ( $config->get( 'SkinJSONValidate' ) ) {
-			$out->addSubtitle(
-				self::hookTestElement( 'OutputPageBeforeHTML', $config, false, 'Call addSubtitle on OutputPage' )
-			);
+			$s = $out->getSubtitle();
+			$msg =  'Call addSubtitle on OutputPage';
+			// On certain special pages (e.g. Special:SpecialPages)
+			// OutputPageBeforeHTML can be called more than once
+			// (seems like a bug) so make sure we don't add this multiple times.
+			if ( strpos( $s, $msg ) === false ) {
+				$out->addSubtitle(
+					self::hookTestElement( 'OutputPageBeforeHTML', $config, false, $msg )
+				);
+			}
 			$out->addJsConfigVars( [
 				'wgSkinJSONValidate' => [
 					'wgLogos' => ResourceLoaderSkinModule::getAvailableLogos(
