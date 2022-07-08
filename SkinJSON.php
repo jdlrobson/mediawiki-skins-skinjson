@@ -139,13 +139,13 @@ class SkinJSON extends SkinMustache {
 		}
 	}
 
-	public static function onSkinAfterPortlet( $skin, $portlet, &$html ) {
+	public static function onSkinAfterPortlet( $skin, $name, &$html ) {
 		$html .= self::hookTestElement(
 			'SkinAfterPortlet',
 			$skin->getConfig(),
 			// only these ones are inline
-			in_array( $portlet, [ 'navigation', 'namespaces', 'views' ] ),
-			'($portlet === "' . $portlet . '")'
+			in_array( $name, [ 'navigation', 'namespaces', 'views' ] ),
+			'($name === "' . $name . '")'
 		);
 	}
 
