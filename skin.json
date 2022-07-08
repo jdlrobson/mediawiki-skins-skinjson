@@ -70,6 +70,7 @@
 		"SkinJSONValidate": true
 	},
 	"Hooks": {
+		"BeforePageDisplay": "SkinJSON::onBeforePageDisplay",
 		"SiteNoticeAfter": "SkinJSON::onSiteNoticeAfter",
 		"SidebarBeforeOutput": "SkinJSON::onSidebarBeforeOutput",
 		"OutputPageBodyAttributes": "SkinJSON::onOutputPageBodyAttributes",
