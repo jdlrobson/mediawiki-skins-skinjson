@@ -8,12 +8,28 @@
 
 			a {
 				display: block;
-				padding: 0.75rem 1rem;
 				background: var( --color-skinjson-surface );
 				font-size: 0.8125rem;
 				line-height: 1.25;
 				text-align: start;
 				text-decoration: none;
+				width: 2rem;
+				height: 2rem;
+				opacity: 0.5;
+
+				&:before {
+					.skin-skinjson-popups-enabled & {
+						content: '➕';
+						position: absolute;
+						left: 0;
+						top: 0;
+						right: 0;
+						bottom: 0;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					}
+				}
 
 				&:hover {
 					// So user can see it even when it is under another element

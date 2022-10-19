@@ -180,7 +180,7 @@ $(function () {
         return el;
     };
 
-    const container = document.querySelector( '.skin-json-overlay' ) ?? createContainer();
+    const container = document.querySelector( '.skin-json-overlay' ) || createContainer();
 
     const scoreToGrade = (s, r) => {
         const total = Object.keys(r).length;
