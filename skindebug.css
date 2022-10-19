@@ -1,3 +1,19 @@
 /* will be exposed by banner */
 #pt-skin-json-hook-validation-user-menu,
+.skin-json-validation-element__description,
 .xdebug-error { display: none; }
+
+.skin-json-hook-validation-element a {
+	position: relative;
+}
+
+.skin-json-validation-element__title {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	opacity: 0;
+}
