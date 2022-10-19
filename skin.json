@@ -64,10 +64,18 @@
 		]
 	},
 	"config": {
-		"SkinJSONTestUser": "",
-		"SkinJSONExtensionHints": true,
-		"SkinJSONDebug": true,
-		"SkinJSONValidate": true
+		"SkinJSONTestUser": {
+			"value": ""
+		},
+		"SkinJSONExtensionHints": {
+			"value": true
+		},
+		"SkinJSONDebug": {
+			"value": true
+		},
+		"SkinJSONValidate": {
+			"value": true
+		}
 	},
 	"Hooks": {
 		"BeforePageDisplay": "SkinJSON::onBeforePageDisplay",
@@ -85,5 +93,5 @@
 		"localBasePath": "",
 		"remoteSkinPath": "SkinJSON"
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }
