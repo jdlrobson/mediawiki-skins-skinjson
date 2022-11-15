@@ -13,6 +13,9 @@ wfLoadSkin('SkinJson');
 * Navigate to the page you want to debug and add `?useskin=skinjson` to the URL e.g. http://localhost:8888/w/index.php/Main_page?useskin=skinjson
 * Install a Chrome or Firefox extension for prettifying JSON to allow exploration of the data.
 
+# Skins API
+This provides the REST API at /w/rest.php/v1/skins for exploring installed skins.
+
 # Skins that extend SkinMustache
 
 The skin also adds a special URL to inspect data in skins which extend the SkinMustache class providing their own skin data.
