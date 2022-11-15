@@ -16,13 +16,13 @@ const init = () => {
 		} );
 
 		alertBtn.textContent = 'Development warning: This skin may break in future MediaWiki versions. Click this message to show deprecation notices.';
-		alertBtn.setAttribute( 'class', 'errorbox messagebox' );
+		alertBtn.setAttribute( 'class', 'mw-message-box-error mw-message-box' );
 		const text = document.createElement( 'pre' );
 		text.style.display = 'none';
 		text.textContent = deprecationMsg.join( '' );
 		alertBtn.appendChild( text );
 	} else {
-		alertBtn.setAttribute( 'class', 'successbox messagebox' );
+		alertBtn.setAttribute( 'class', 'mw-message-box-success mw-message-box' );
 		alertBtn.textContent = 'This skin is compatible with the latest version of MediaWiki.';
 	}
 
