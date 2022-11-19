@@ -64,6 +64,11 @@
 		]
 	},
 	"config": {
+		"SkinJSONDisabledSkins": {
+			"value": [
+				"library"
+			]
+		},
 		"SkinJSONTestUser": {
 			"value": ""
 		},
