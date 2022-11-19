@@ -33,12 +33,19 @@ class Handler extends Rest\Handler {
 
 	private function getMeta( $factory, $skinkey ) {
 		$tags = [];
-		try {
-			$skin = $factory->makeSkin( $skinkey );
-			$options = $skin->getOptions() ?? [];
-		} catch ( SkinException $e ) {
+		$config = MediaWikiServices::getInstance()->getMainConfig();
+		$ignore = in_array( $skinkey, $config->get( 'SkinJSONDisabledSkins' ) );
+
+		if ( !$ignore ) {
+			try {
+				$skin = $factory->makeSkin( $skinkey );
+				$options = $skin->getOptions() ?? [];
+			} catch ( SkinException $e ) {
+				$tags[] = 'load-error';
+				$options = [];
+			}
+		} else {
 			$tags[] = 'load-error';
-			$options = [];
 		}
 		if (
 			is_a( $skin, 'SkinMustache' ) ||
