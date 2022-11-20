@@ -87,9 +87,26 @@ class Handler extends Rest\Handler {
 		return $response;
 	}
 
+	private function makeSkinEntry() {
+		return [
+			'path' => null,
+			'type' => 'skin',
+			'author' => [],
+			'descriptionmsg' => '',
+			'hooks' => [],
+			'tag' => [],
+			'license-name' => null,
+			'namemsg' => null,
+			'url' => null,
+			'compatibility' => null,
+		];
+	}
+
 	private function getResponseJSON() {
 		$cacheFilePath = dirname( __FILE__ ) . '/cache-skins-json-response.txt';
 		$cached = file_get_contents($cacheFilePath);
+		$config = MediaWikiServices::getInstance()->getMainConfig();
+
 		if ( $cached ) {
 			$cached = json_decode( $cached, true );
 			if ( $cached['timestamp'] === date( 'Y-m-d' ) ) {
@@ -101,6 +118,9 @@ class Handler extends Rest\Handler {
 		$services = MediaWikiServices::getInstance();
 		$skins = $this->getSkinsJSON( $services );
 		$args = $this->getValidatedParams();
+		foreach ( $config->get( 'SkinJSONEnabledSkins' ) as $key => $entry ) {
+			$skins[$key] = $this->makeSkinEntry();
+		}
 		$json = [ 'skins' => $skins, 'timestamp' => date( 'Y-m-d' ) ];
 		$encoded = json_encode( $json );
 		// cache to file when running experimental

@@ -69,6 +69,11 @@
 				"library"
 			]
 		},
+		"SkinJSONEnabledSkins": {
+			"value": {
+				"chameleon": []
+			}
+		},
 		"SkinJSONTestUser": {
 			"value": ""
 		},
