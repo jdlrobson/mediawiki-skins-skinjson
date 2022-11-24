@@ -147,6 +147,18 @@ class Handler extends Rest\Handler {
 			if ( is_string( $info['author'] ) ) {
 				$info['author'] = [ $info['author'] ];
 			}
+			$path = implode( '/', array_slice( explode( '/', $info['path'] ), 0, -1 ) );
+			$branches = shell_exec('cd ' . $path . ' && git branch -r');
+			$mwVersions = array_map( static function ( $branch ) {
+					return trim( $branch );
+				},
+				array_values(
+					array_filter( explode( "\n", $branches ), static function ( $branch ) {
+						return strpos( $branch, 'origin/REL' ) !== false;
+					} )
+				)
+			);
+
 			if ( $info['type'] === 'skin' ) {
 				// work out skin
 				$skinInfo = json_decode( file_get_contents( $info['path'] ), true );
@@ -157,6 +169,7 @@ class Handler extends Rest\Handler {
 					$compatibility = $json['requires']['MediaWiki'] ?? null;
 					$info['compatibility'] = $compatibility;
 					$info['hooks'] = array_keys( $json['Hooks'] ?? [] );
+					$info['versions'] = $mwVersions;
 					$info += $this->getMeta( $factory, $skinkey );
 					if ( isset( $info['time'] ) && $info['time'] > $highest ) {
 						$highest = $info['time'];
