@@ -6,7 +6,7 @@ const fetchPreviewForTitle = ( title, el ) => {
 	const hook = el.dataset.hook;
 	const info = el.dataset.info;
 	const url = `https://www.mediawiki.org/wiki/Manual:Hooks/${hook}`;
-	let code = info ? `<p>Use the following check inside the hook body: <pre>${info}</pre>.</p>` : '';
+	const code = info ? `<p>Use the following check inside the hook body: <pre>${info}</pre>.</p>` : '';
 	deferred.resolve( {
 		title: 'Hello world',
 		extract: [
@@ -39,7 +39,7 @@ function init() {
 	document.body.classList.add( ENABLED_CLASS );
 }
 
-if ( !document.body.classList.contains( ENABLED_CLASS) ) {
+if ( !document.body.classList.contains( ENABLED_CLASS ) ) {
 	init();
 }
 

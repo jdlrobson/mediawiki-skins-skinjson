@@ -1,7 +1,7 @@
 [
-    {
-        "path": "/v1/skins",
-        "class": "SkinJSON\\Handler",
-        "services": []
-    }
+	{
+		"path": "/v1/skins",
+		"class": "SkinJSON\\Handler",
+		"services": []
+	}
 ]

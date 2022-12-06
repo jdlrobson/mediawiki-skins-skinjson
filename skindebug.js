@@ -1,7 +1,8 @@
 const init = () => {
 	const alertBtn = document.createElement( 'div' );
-	let refnode = document.querySelector('body meta[charset]');
+	let refnode = document.querySelector( 'body meta[charset]' );
 	if ( refnode ) {
+		const text = document.createElement( 'pre' );
 		const deprecationMsg = [];
 		while ( refnode.previousSibling ) {
 			deprecationMsg.unshift( refnode.textContent );
@@ -17,7 +18,6 @@ const init = () => {
 
 		alertBtn.textContent = 'Development warning: This skin may break in future MediaWiki versions. Click this message to show deprecation notices.';
 		alertBtn.setAttribute( 'class', 'mw-message-box-error mw-message-box' );
-		const text = document.createElement( 'pre' );
 		text.style.display = 'none';
 		text.textContent = deprecationMsg.join( '' );
 		alertBtn.appendChild( text );
@@ -37,7 +37,7 @@ const init = () => {
 };
 
 if (
-	document.readyState === "complete"
+	document.readyState === 'complete'
 ) {
 	init();
 } else {

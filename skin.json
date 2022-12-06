@@ -30,7 +30,7 @@
 		"SkinJSON": "SkinJSON.php"
 	},
 	"AutoloadNamespaces": {
-	  "SkinJSON\\": "includes/"
+		"SkinJSON\\": "includes/"
 	},
 	"callback": "SkinJSON::onRegistration",
 	"ResourceModules": {

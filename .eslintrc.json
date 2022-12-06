@@ -4,5 +4,11 @@
 		"wikimedia/client-es6",
 		"wikimedia/jquery",
 		"wikimedia/mediawiki"
-	]
+	],
+	"rules": {
+		"no-implicit-globals": "off",
+		"mediawiki/class-doc": "off",
+		"compat/compat": "off",
+		"no-jquery/no-global-selector": "off"
+	}
 }
