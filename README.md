@@ -24,3 +24,11 @@ To activate this mode, you must make use of the `useskin` and `useformat` query 
 
 For example to inspect SkinVector's custom data use the following query string on any URL:
 `?useskin=vector&useformat=json`
+
+# Debug mode
+
+```
+$wgSkinJSONDebug = true;
+```
+
+Extension and skin developers can enable a debug mode to allow themselves to explore extensibility of skins. In 1.40 with the [MediaWiki page previews extension installed](https://mediawiki.org/wiki/Extension:Popups) you can hover over question marks in the UI to understand how your extension can extend the skin.
