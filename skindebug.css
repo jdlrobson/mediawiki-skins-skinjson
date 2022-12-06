@@ -1,7 +1,9 @@
 /* will be exposed by banner */
 #pt-skin-json-hook-validation-user-menu,
 .skin-json-validation-element__description,
-.xdebug-error { display: none; }
+.xdebug-error {
+	display: none;
+}
 
 .skin-skinjson-popups-enabled .skin-json-hook-validation-element a {
 	position: relative;
