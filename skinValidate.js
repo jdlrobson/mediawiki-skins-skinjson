@@ -51,20 +51,21 @@ $( function () {
 	];
 
 	if ( validateConfig.wgLogos ) {
+		const skinHasLogo = () => {
+			const logos = validateConfig.wgLogos || {};
+			const imgsMatchWordmark = Array.from( document.querySelectorAll( 'img' ) )
+				.filter( ( n ) => {
+					const src = n.getAttribute( 'src' );
+					return ( logos.wordmark && src === logos.wordmark.src ) ||
+						src === logos.icon;
+				} );
+			return imgsMatchWordmark.length > 0 || $( '.mw-wiki-logo' ).length > 0;
+		};
 		rules.push(
 			{
 				title: 'Skin may not support wordmarks',
 				description: '',
-				condition: () => {
-					const logos = validateConfig.wgLogos || {};
-					return !( Array.from( document.querySelectorAll( 'img' ) )
-						.filter( ( n ) => {
-							const src = n.getAttribute( 'src' );
-							return ( logos.wordmark && src === logos.wordmark.src ) ||
-								logos.icon;
-						} ).length === 0 && $( '.mw-wiki-logo' ).length === 0
-					);
-				}
+				condition: skinHasLogo()
 			}
 		);
 	}
