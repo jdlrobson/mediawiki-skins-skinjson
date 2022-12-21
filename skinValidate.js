@@ -115,12 +115,12 @@ $( function () {
 			{
 				title: 'Skin may not show categories',
 				description: '',
-				condition: $( '.mw-normal-catlinks' ).length !== 0
+				condition: $( '.mw-normal-catlinks, .mw-portlet-category-normal' ).length !== 0
 			},
 			{
 				title: 'Skin may not show hidden categories',
 				description: '',
-				condition: $( '.mw-hidden-catlinks' ).length !== 0
+				condition: $( '.mw-hidden-catlinks, .mw-portlet-category-hidden' ).length !== 0
 			}
 		);
 	}
