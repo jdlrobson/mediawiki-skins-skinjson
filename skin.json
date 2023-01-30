@@ -90,13 +90,13 @@
 			"value": ""
 		},
 		"SkinJSONExtensionHints": {
-			"value": true
+			"value": false
 		},
 		"SkinJSONDebug": {
-			"value": true
+			"value": false
 		},
 		"SkinJSONValidate": {
-			"value": true
+			"value": false
 		}
 	},
 	"Hooks": {
