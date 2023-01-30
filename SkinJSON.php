@@ -111,7 +111,6 @@ class SkinJSON extends SkinMustache {
 				implode( '', [
 					'<style id="skinjson-style">',
 					'.skin-json-hints-hide .skin-json-validation-element { display: none !important; }',
-					'.skin-json-validation-element { display: none; }',
 					'</style>'
 				] )
 			);
