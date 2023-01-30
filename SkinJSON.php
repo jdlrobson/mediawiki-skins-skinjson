@@ -43,7 +43,7 @@ class SkinJSON extends SkinMustache {
 	}
 
 	public static function onSiteNoticeAfter( &$siteNotice, $skin ) {
-		$empty = strlen( $siteNotice ) === 0;
+		$empty = !$siteNotice || strlen( $siteNotice ) === 0;
 		$config = $skin->getConfig();
 		if ( $config->get( 'SkinJSONValidate' ) ) {
 			$siteNotice .= self::hookTestElement( 'SiteNoticeAfter', $config, false );
