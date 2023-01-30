@@ -187,6 +187,9 @@ class SkinJSON extends SkinMustache {
 	}
 
 	public static function onSkinTemplateNavigationUniversal( $skin, &$links ) {
+		if ( !$skin->getConfig()->get( 'SkinJSONValidate' ) ) {
+			return;
+		}
 		$links['user-menu']['skin-json-hook-validation-user-menu'] = [
 			'class' => [
 				'skin-json-validation-element',
