@@ -285,7 +285,8 @@ class SkinJSON extends SkinMustache {
 				] );
 			}
 		}
-		return false;
+		// This is an abortable hook so do not return false.
+		return;
 	}
 
 	function outputPage() {
