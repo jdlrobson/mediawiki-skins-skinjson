@@ -33,6 +33,9 @@
 		"SkinJSON\\": "includes/"
 	},
 	"callback": "SkinJSON::onRegistration",
+	"DefaultUserOptions": {
+		"skinjson-popups": 1
+	},
 	"ResourceModules": {
 		"skins.skinjson.validate": {
 			"es6": true,
@@ -52,6 +55,10 @@
 		},
 		"skins.skinjson.popup": {
 			"es6": true,
+			"messages": [
+				"popups-settings-option-skinjson-tooltip",
+				"popups-settings-option-skinjson-tooltip-description"
+			],
 			"scripts": [ "skinpopup.js" ],
 			"targets": [ "desktop", "mobile" ]
 		},
@@ -90,7 +97,7 @@
 			"value": ""
 		},
 		"SkinJSONExtensionHints": {
-			"value": false
+			"value": true
 		},
 		"SkinJSONDebug": {
 			"value": false
@@ -101,6 +108,7 @@
 	},
 	"Hooks": {
 		"BeforePageDisplay": "SkinJSON::onBeforePageDisplay",
+		"GetPreferences": "SkinJSON::onGetPreferences",
 		"SiteNoticeAfter": "SkinJSON::onSiteNoticeAfter",
 		"SidebarBeforeOutput": "SkinJSON::onSidebarBeforeOutput",
 		"OutputPageBodyAttributes": "SkinJSON::onOutputPageBodyAttributes",

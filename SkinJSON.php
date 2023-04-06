@@ -206,6 +206,21 @@ class SkinJSON extends SkinMustache {
 		);
 	}
 
+	/**
+	 * @param User $user User whose preferences are being modified.
+	 * @param array[] &$prefs Preferences description array, to be fed to a HTMLForm object.
+	 */
+	public static function onGetPreferences( $user, &$prefs ): void {
+		$prefs += [
+			'skinjson-popups' => [
+				'type' => 'toggle',
+				'label-message' => 'popups-settings-option-skinjson-tooltip',
+				'section' => 'rendering/reading',
+				'help-message' => 'popups-settings-option-skinjson-tooltip-description'
+			],
+		];
+	}
+
 	private static function isSkinJSONMode( $request ) {
 		$reqSkinKey = $request->getVal( 'useskin' );
 		$format = $request->getVal( 'useformat' );

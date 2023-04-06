@@ -3,5 +3,7 @@
 		"authors": [ "..." ]
 	},
 	"skinname-skinjson": "SkinJson (Debug)",
-	"skinname-desc": "An example skin showcasing the best practices"
+	"skinname-desc": "An example skin showcasing the best practices",
+	"popups-settings-option-skinjson-tooltip": "Show skin hints",
+	"popups-settings-option-skinjson-tooltip-description": "See hints on where MediaWiki extensions can extend the interface."
 }

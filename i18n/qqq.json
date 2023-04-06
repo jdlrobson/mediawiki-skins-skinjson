@@ -3,5 +3,7 @@
 		"authors": [ "..." ]
 	},
 	"skinname-skinjson": "{{optional}}",
-	"skinname-desc": "{{desc|what=skin|name=Example|url=https://www.mediawiki.org/wiki/Skin:Example}}"
+	"skinname-desc": "{{desc|what=skin|name=Example|url=https://www.mediawiki.org/wiki/Skin:Example}}",
+	"popups-settings-option-skinjson-tooltip": "Popup setting name",
+	"popups-settings-option-skinjson-tooltip-description": "Describe popups setting."
 }

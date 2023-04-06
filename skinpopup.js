@@ -45,6 +45,7 @@ if ( !document.body.classList.contains( ENABLED_CLASS ) ) {
 
 module.exports = {
 	type,
+	enabled: mw.user.options.get( 'skinjson-popups' ),
 	selector: '.skin-json-validation-element__title',
 	gateway: {
 		fetchPreviewForTitle
