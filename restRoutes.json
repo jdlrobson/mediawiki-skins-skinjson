@@ -3,15 +3,5 @@
 		"path": "/v1/skins",
 		"class": "SkinJSON\\Handler",
 		"services": []
-	},
-	{
-		"path": "/v1/skins/{name}",
-		"class": "SkinJSON\\Handler",
-		"services": []
-	},
-	{
-		"path": "/v1/skins/{name}/{title}",
-		"class": "SkinJSON\\Handler",
-		"services": []
 	}
 ]

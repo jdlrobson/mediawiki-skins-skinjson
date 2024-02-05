@@ -6,7 +6,6 @@ use ExtensionRegistry;
 use MediaWiki\Rest;
 use MediaWiki\MediaWikiServices;
 use SkinJSON;
-use Title;
 use Wikimedia\ParamValidator\ParamValidator;
 
 /**
@@ -24,16 +23,6 @@ class Handler extends Rest\Handler {
 
 	public function getParamSettings() {
 		return [
-			'name' => [
-				self::PARAM_SOURCE => 'path',
-				ParamValidator::PARAM_TYPE => 'string',
-				ParamValidator::PARAM_REQUIRED => false
-			],
-			'title' => [
-				self::PARAM_SOURCE => 'path',
-				ParamValidator::PARAM_TYPE => 'string',
-				ParamValidator::PARAM_REQUIRED => false
-			],
 			'experimental' => [
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_REQUIRED => false,
@@ -84,38 +73,17 @@ class Handler extends Rest\Handler {
 		return $meta;
 	}
 
-	private function generateSkinJSON( $name, $title ) {
-		$services = MediaWikiServices::getInstance();
-		$factory = $services->getSkinFactory();
-
-		$skin = $factory->makeSkin( $name );
-		$ctx = $skin->getContext();
-		$out = $skin->getOutput();
-		if ( !$title ) {
-			$title = 'Main_Page';
-		}
-		$t = Title::newFromText( $title );
-		$out->setTitle( $t );
-		$ctx->setOutput( $out );
-		$skin->setContext( $ctx );
-		return $skin->getTemplateData();
-	}
-
 	/**
 	 * @return Response
 	 * @throws LocalizedHttpException
 	 */
 	public function execute() {
-		$request = $this->getRequest();
-		$name = $request->getPathParam( 'name' );
-		$json = $name ? $this->generateSkinJSON( $name, $request->getPathParam( 'title' ) ) : $this->getResponseJSON();
+		$services = MediaWikiServices::getInstance();
 		$response = $this->getResponseFactory()->createJson(
-			$json
+			$this->getResponseJSON()
 		);
-		$response->setStatus( 200 );
 		$response->setHeader( 'Access-Control-Allow-Origin', '*' );
 		$response->setHeader( 'Cache-Control', 'no-store, max-age=0' );
-		$response->setHeader( 'Content-Type', 'application/json' );
 		return $response;
 	}
 
