@@ -63,7 +63,7 @@
 			"targets": [ "desktop", "mobile" ]
 		},
 		"skins.skinjson": {
-			"class": "ResourceLoaderSkinModule",
+			"class": "MediaWiki\\ResourceLoader\\SkinModule",
 			"features": {
 				"normalize": true,
 				"elements": true,
