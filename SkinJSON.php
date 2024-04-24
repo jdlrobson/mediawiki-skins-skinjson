@@ -101,7 +101,7 @@ class SkinJSON extends SkinMustache {
 		if ( $config->get( 'SkinJSONValidate' ) ) {
 			$out->addJsConfigVars( [
 				'wgSkinJSONValidate' => [
-					'wgLogos' => ResourceLoaderSkinModule::getAvailableLogos(
+					'wgLogos' => MediaWiki\ResourceLoader\SkinModule::getAvailableLogos(
 						$config
 					),
 				],
