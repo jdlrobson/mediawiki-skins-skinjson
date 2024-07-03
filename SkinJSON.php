@@ -2,46 +2,7 @@
 
 use MediaWiki\MediaWikiServices;
 
-class SkinJSON extends SkinMustache {
-	private $loadedTemplateData;
-	public function generateHTML() {
-		$this->setupTemplateContext();
-		$data = $this->getTemplateData();
-		return json_encode( $data, JSON_PRETTY_PRINT );
-	}
-
-	public function setTemplateVariable( $key, $value ) {
-		$this->loadedTemplateData[$key] = $value;
-	}
-
-	/**
-	 * Returns template data for the skin from cached data or from core.
-	 */
-	function getTemplateData() {
-		if ($this->loadedTemplateData) {
-			return $this->loadedTemplateData;
-		} else {
-			return parent::getTemplateData();
-		}
-	}
-
-	/**
-	 * Loads template data from another skin into SkinJSON so SkinJSON functions as a proxy.
-	 */
-	function loadTemplateData( $data ) {
-		$this->loadedTemplateData = $data;
-	}
-
-	function getUser() {
-		$testUserName = $this->getConfig()->get( 'SkinJSONTestUser' );
-		if ( $this->getRequest()->getBool('testuser') && $testUserName) {
-			$testUser = User::newFromName( $testUserName );
-			$testUser->load();
-			return $testUser;
-		}
-		return parent::getUser();
-	}
-
+class SkinJSON {
 	public static function onSiteNoticeAfter( &$siteNotice, $skin ) {
 		$empty = !$siteNotice || strlen( $siteNotice ) === 0;
 		$config = $skin->getConfig();
@@ -302,18 +263,5 @@ class SkinJSON extends SkinMustache {
 		}
 		// This is an abortable hook so do not return false.
 		return;
-	}
-
-	function outputPage() {
-		$out = $this->getOutput();
-		$this->initPage( $out );
-		$out->addJsConfigVars( $this->getJsConfigVars() );
-		$response = $this->getRequest()->response();
-		$response->header( 'Content-Type: application/json' );
-		$response->header( 'Cache-Control: no-cache' );
-		$response->header( 'Access-Control-Allow-Methods: GET' );
-		$response->header( 'Access-Control-Allow-Origin: *' );
-		// result may be an error
-		echo $this->generateHTML();
 	}
 }
