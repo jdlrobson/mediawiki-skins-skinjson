@@ -15,11 +15,11 @@
 		}
 	},
 	"requires": {
-		"MediaWiki": ">= 1.38.0"
+		"MediaWiki": ">= 1.42.0"
 	},
 	"ValidSkinNames": {
 		"skinjson": {
-			"class": "SkinJSON",
+			"class": "SkinApi",
 			"skippable": true,
 			"args": [ {
 				"format": "json",
