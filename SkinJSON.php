@@ -227,6 +227,17 @@ class SkinJSON extends SkinMustache {
 		return $reqSkinKey && $format === 'json';
 	}
 
+	private function setSkinContext( $skin, $title = '' ) {
+		$fauxContext = $skin->getContext();
+		$out = new OutputPage( new RequestContext() );
+		$out->enableOOUI();
+		$fauxContext->setOutput( $out );
+		if ( $title ) {
+			$fauxContext->setTitle( Title::newFromText( $title ) );
+		}
+		$skin->setContext( $fauxContext );
+	}
+
 	/**
 	 * Attempt a basic render of the skin and collect some meta
 	 * data based on what happens.
@@ -241,13 +252,7 @@ class SkinJSON extends SkinMustache {
 		try {
 			error_reporting( -1 );
 			ini_set( 'display_errors', -1 );
-			$fauxContext = $skin->getContext();
-			$out = new OutputPage( new RequestContext() );
-			$out->enableOOUI();
-			$fauxContext->setOutput( $out );
-			$fauxContext->setTitle( Title::newFromText( 'Special:BlankPage' ) );
-			$skin->setContext( $fauxContext );
-
+			$this->setSkinContext( $skin );
 			$then = microtime( true );
 			$html = $skin->generateHTML();
 			$warnings = ob_get_contents();
